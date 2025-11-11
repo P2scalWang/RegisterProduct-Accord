@@ -206,7 +206,7 @@
   <script>
     // ============ CONFIG SECTION ============
     const CONFIG = {
-      SHEETS_URL: 'https://docs.google.com/spreadsheets/d/1ZtdHKJXKB4UStnrib-zn6vtO3j2ZZWrRINZ6fKzflvA/export?format=csv&gid=332563834',
+      SHEETS_URL: 'https://docs.google.com/spreadsheets/d/1ZtdHKJXKB4UStnrib-zn6vtO3j2ZZWrRINZ6fKzflvA/edit?gid=332563834#gid=332563834',
       WEBHOOK_URL: 'https://n8n.srv1038568.hstgr.cloud/webhook/ProOutput'
     };
     // ========================================
@@ -259,44 +259,20 @@
     async function loadProducts(){
       const select = document.getElementById('productModel');
       try{
-        select.innerHTML = '<option value="">🔄 กำลังโหลด...</option>';
-        
-        // Add no-cache headers to force fresh data
-        const res = await fetch(CONFIG.SHEETS_URL, {
-          method: 'GET',
-          cache: 'no-cache',
-          headers: {
-            'Cache-Control': 'no-cache'
-          }
-        });
-        
-        if (!res.ok) {
-          throw new Error(`HTTP error! status: ${res.status}`);
-        }
-        
+        select.innerHTML = '<option value="">กำลังโหลด...</option>';
+        const res = await fetch(CONFIG.SHEETS_URL);
         const csv = await res.text();
-        const lines = csv.split(/\r?\n/); // Handle both \n and \r\n
+        const lines = csv.split('\n');
         const products = [];
         
         // Start from line 1 to skip header
         for(let i=1; i<lines.length; i++){
           const line = lines[i].trim();
           if(!line) continue;
-          
-          // Handle CSV properly with quoted values
-          const cols = line.match(/(".*?"|[^",\s]+)(?=\s*,|\s*$)/g) || [];
-          
+          const cols = line.split(',');
           // Extract only Column A (Model Name)
-          let model = (cols[0]||'').replace(/^"(.+)"$/, '$1').trim();
-          model = model.replace(/^,/, '').trim(); // Remove leading comma if any
-          
-          if(model && model !== '') {
-            products.push(model);
-          }
-        }
-        
-        if(products.length === 0) {
-          throw new Error('ไม่พบข้อมูลสินค้า');
+          const model = (cols[0]||'').replace(/^"(.+)"$/, '$1').trim();
+          if(model) products.push(model);
         }
         
         select.innerHTML = '<option value="">-- เลือกรุ่นสินค้า --</option>';
@@ -306,16 +282,10 @@
           opt.textContent = m; 
           select.appendChild(opt);
         });
-        
-        console.log(`✅ โหลดสินค้าสำเร็จ: ${products.length} รายการ`);
-        
       }catch(err){
-        console.error('❌ Error loading products:', err);
-        select.innerHTML = '<option value="">⚠️ ไม่สามารถโหลดข้อมูลได้</option>';
-        
-        // Show more detailed error
-        const errorMsg = `ไม่สามารถโหลดรายการสินค้าได้\n\nรายละเอียด: ${err.message}\n\nกรุณาตรวจสอบ:\n1. Google Sheets ต้องเปิดการแชร์เป็น "Anyone with the link can view"\n2. URL ใน CONFIG ต้องเป็น export format`;
-        alert(errorMsg);
+        console.error(err);
+        select.innerHTML = '<option value="">ไม่สามารถโหลดข้อมูลได้</option>';
+        alert('ไม่สามารถโหลดรายการสินค้าได้ กรุณาตรวจสอบ Google Sheets URL');
       }
     }
     window.addEventListener('load', loadProducts);
