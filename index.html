@@ -64,9 +64,6 @@
     .success-modal{ text-align:center; }
     .success-icon{ width:80px; height:80px; background:linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius:50%; display:flex; align-items:center; justify-content:center; margin:0 auto 24px; }
     .loading{ display:inline-block; width:20px; height:20px; border:3px solid rgba(255,255,255,.3); border-radius:50%; border-top-color:#fff; animation:spin .8s linear infinite; }
-    .btn-group{ display:flex; gap:10px; margin-bottom:10px; }
-    .btn-secondary{ display:inline-flex; align-items:center; gap:6px; padding:10px 12px; border-radius:10px; font-weight:600; border:2px solid #374151; background:#1f2937; color:#e5e7eb; cursor:pointer; transition:.3s; font-size:0.9rem; }
-    .btn-secondary:hover{ background:#374151; transform:translateY(-1px); }
     @keyframes fadeIn{ from{opacity:0} to{opacity:1} }
     @keyframes fadeInDown{ from{opacity:0; transform:translateY(-20px)} to{opacity:1; transform:translateY(0)} }
     @keyframes fadeInUp{ from{opacity:0; transform:translateY(20px)} to{opacity:1; transform:translateY(0)} }
@@ -89,6 +86,7 @@
     </div>
 
     <div class="form-card">
+      <!-- NOTE: we keep JS-driven submit to allow the confirm modal; enctype is for semantics -->
       <form id="warrantyForm" enctype="multipart/form-data">
         <div class="form-group">
           <label>ชื่อ-นามสกุล<span class="required">*</span></label>
@@ -105,22 +103,80 @@
           <input type="date" id="purchaseDate" name="purchaseDate" />
         </div>
 
+        <!-- 🔁 แทนที่เฉพาะบล็อคนี้: รุ่นสินค้า -->
         <div class="form-group">
           <label>รุ่นสินค้า<span class="required">*</span></label>
-          <div class="btn-group">
-            <button type="button" onclick="loadProducts()" class="btn-secondary">
-              🔄 รีเฟรช
+
+          <!-- แถวปุ่มแบบในภาพ -->
+          <div style="display:flex;gap:10px;margin-bottom:10px;">
+            <button type="button" onclick="loadProducts()" 
+                    style="display:inline-flex;align-items:center;gap:6px;padding:10px 12px;border-radius:10px;font-weight:600;border:2px solid #374151;background:#1f2937;color:#e5e7eb;cursor:pointer;">
+              รีเฟรช
             </button>
-            <button type="button" id="btnModelToggle" onclick="toggleModelInput()" class="btn-secondary">
-              ✏️ พิมพ์เอง
+            <button type="button" id="btnModelToggle" onclick="toggleModelInput()" 
+                    style="display:inline-flex;align-items:center;gap:6px;padding:10px 12px;border-radius:10px;font-weight:600;border:2px solid #374151;background:#1f2937;color:#e5e7eb;cursor:pointer;">
+              พิมพ์เอง
             </button>
           </div>
+
+          <!-- โหมดเลือกจากรายการ -->
           <select id="productModel" name="productModel" required>
             <option value="">กำลังโหลดข้อมูล...</option>
           </select>
+
+          <!-- โหมดพิมพ์เอง (เริ่มซ่อน) -->
           <input type="text" id="productModelInput" placeholder="พิมพ์รุ่นสินค้าเอง"
                  style="display:none;width:100%;padding:14px 18px;border:2px solid #e2e8f0;border-radius:12px;background:#f7fafc;margin-top:0;" />
         </div>
+
+        <script>
+          /* สคริปต์เฉพาะบล็อคนี้: toggle พิมพ์เอง/เลือก + sync ให้โค้ดเดิมอ่านจาก #productModel ได้ */
+          (function () {
+            window.toggleModelInput = function () {
+              const sel = document.getElementById('productModel');
+              const inp = document.getElementById('productModelInput');
+              const btn = document.getElementById('btnModelToggle');
+              const customOn = inp.style.display !== 'none';
+
+              if (customOn) {
+                // กลับไปเลือกจากรายการ
+                inp.style.display = 'none';
+                inp.required = false;
+                sel.style.display = '';
+                sel.required = true;
+                btn.textContent = 'พิมพ์เอง';
+              } else {
+                // ไปโหมดพิมพ์เอง
+                sel.style.display = 'none';
+                sel.required = false;
+                inp.style.display = '';
+                inp.required = true;
+                if (!inp.value) inp.value = sel.value || '';
+                btn.textContent = 'กลับไปเลือก';
+                syncToSelect(); // ให้ค่าไปอยู่ใน select ด้วย
+              }
+            };
+
+            function syncToSelect() {
+              const sel = document.getElementById('productModel');
+              const inp = document.getElementById('productModelInput');
+              let opt = sel.querySelector('option[data-custom="1"]');
+              if (!opt) {
+                opt = document.createElement('option');
+                opt.setAttribute('data-custom', '1');
+                sel.appendChild(opt);
+              }
+              const v = (inp.value || '').trim();
+              opt.value = v;
+              opt.textContent = v || '—  —';
+              sel.value = v; // ให้โค้ดเดิมอ่านค่าได้จาก #productModel
+            }
+
+            document.getElementById('productModelInput')
+                    .addEventListener('input', syncToSelect);
+          })();
+        </script>
+        <!-- 🔁 จบส่วนที่แก้ -->
 
         <div class="form-group">
           <label>Serial Number<span class="required">*</span></label>
@@ -140,6 +196,7 @@
                 <div style="font-size:.85rem;color:#718096;">สามารถเลือกได้หลายรูป</div>
               </div>
             </label>
+            <!-- IMPORTANT: add name so FormData(form) includes it automatically -->
             <input type="file" id="serialPhotos" name="serialPhotos" accept="image/*" multiple capture="environment" />
             <div id="photoPreview" class="file-preview"></div>
           </div>
@@ -206,7 +263,7 @@
   <script>
     // ============ CONFIG SECTION ============
     const CONFIG = {
-      SHEETS_URL: 'https://docs.google.com/spreadsheets/d/1ZtdHKJXKB4UStnrib-zn6vtO3j2ZZWrRINZ6fKzflvA/edit?gid=332563834#gid=332563834',
+      SHEETS_URL: 'https://docs.google.com/spreadsheets/d/1ZtdHKJXKB4UStnrib-zn6vtO3j2ZZWrRINZ6fKzflvA/export?format=csv&gid=332563834',
       WEBHOOK_URL: 'https://n8n.srv1038568.hstgr.cloud/webhook/ProOutput'
     };
     // ========================================
@@ -214,48 +271,7 @@
     let selectedFiles = [];
     let reviewCache = {};
 
-    // Toggle between select and custom input
-    window.toggleModelInput = function () {
-      const sel = document.getElementById('productModel');
-      const inp = document.getElementById('productModelInput');
-      const btn = document.getElementById('btnModelToggle');
-      const customOn = inp.style.display !== 'none';
-
-      if (customOn) {
-        inp.style.display = 'none';
-        inp.required = false;
-        sel.style.display = '';
-        sel.required = true;
-        btn.innerHTML = '✏️ พิมพ์เอง';
-      } else {
-        sel.style.display = 'none';
-        sel.required = false;
-        inp.style.display = '';
-        inp.required = true;
-        if (!inp.value) inp.value = sel.value || '';
-        btn.innerHTML = '↩️ กลับไปเลือก';
-        syncToSelect();
-      }
-    };
-
-    function syncToSelect() {
-      const sel = document.getElementById('productModel');
-      const inp = document.getElementById('productModelInput');
-      let opt = sel.querySelector('option[data-custom="1"]');
-      if (!opt) {
-        opt = document.createElement('option');
-        opt.setAttribute('data-custom', '1');
-        sel.appendChild(opt);
-      }
-      const v = (inp.value || '').trim();
-      opt.value = v;
-      opt.textContent = v || '—  —';
-      sel.value = v;
-    }
-
-    document.getElementById('productModelInput').addEventListener('input', syncToSelect);
-
-    // Load product models from Column A
+    // Load product models (Column A from CSV)
     async function loadProducts(){
       const select = document.getElementById('productModel');
       try{
@@ -264,23 +280,17 @@
         const csv = await res.text();
         const lines = csv.split('\n');
         const products = [];
-        
-        // Start from line 1 to skip header
-        for(let i=1; i<lines.length; i++){
+        for(let i=1;i<lines.length;i++){
           const line = lines[i].trim();
           if(!line) continue;
           const cols = line.split(',');
-          // Extract only Column A (Model Name)
           const model = (cols[0]||'').replace(/^"(.+)"$/, '$1').trim();
           if(model) products.push(model);
         }
-        
         select.innerHTML = '<option value="">-- เลือกรุ่นสินค้า --</option>';
         products.forEach(m=>{
           const opt = document.createElement('option');
-          opt.value = m; 
-          opt.textContent = m; 
-          select.appendChild(opt);
+          opt.value = m; opt.textContent = m; select.appendChild(opt);
         });
       }catch(err){
         console.error(err);
@@ -294,8 +304,10 @@
     const fileInput = document.getElementById('serialPhotos');
     fileInput.addEventListener('change', (e)=>{
       const files = Array.from(e.target.files);
+      // Optional: limit number or size here if needed
       selectedFiles = [...selectedFiles, ...files];
       updatePhotoPreview();
+      // clear the input so the same file can be re-selected later
       fileInput.value = '';
     });
 
@@ -313,10 +325,8 @@
         preview.appendChild(div);
       });
     }
-    
     function removePhoto(index){
-      selectedFiles.splice(index,1); 
-      updatePhotoPreview();
+      selectedFiles.splice(index,1); updatePhotoPreview();
     }
 
     // Intercept submit to open confirm modal
@@ -349,18 +359,16 @@
       document.getElementById('confirmModal').style.display = 'block';
     });
 
-    function closeModal(){ 
-      document.getElementById('confirmModal').style.display = 'none'; 
-    }
+    function closeModal(){ document.getElementById('confirmModal').style.display = 'none'; }
 
     async function confirmSubmit(){
       const btn = document.querySelector('.btn-confirm');
-      const orig = btn.innerHTML; 
-      btn.innerHTML = '<span class="loading"></span> กำลังส่งข้อมูล...'; 
-      btn.disabled = true;
-      
+      const orig = btn.innerHTML; btn.innerHTML = '<span class="loading"></span> กำลังส่งข้อมูล...'; btn.disabled = true;
       try{
+        // IMPORTANT: Send as multipart/form-data with FormData + binary files
+        // Do NOT set Content-Type header manually; browser will set the boundary.
         const fd = new FormData();
+        // Append text fields
         fd.append('fullName', reviewCache.fullName);
         fd.append('phone', reviewCache.phone);
         fd.append('purchaseDate', reviewCache.purchaseDate);
@@ -370,6 +378,7 @@
         fd.append('submittedAt', reviewCache.submittedAt);
         fd.append('photoCount', String(reviewCache.photoCount));
 
+        // Append files (same field name for multiple files)
         const serialSafe = (reviewCache.serialNumber || 'SN').replace(/[^a-zA-Z0-9_-]+/g, '-');
         selectedFiles.forEach((file, i)=>{
           const ext = (file.name.split('.').pop() || '').toLowerCase();
@@ -385,8 +394,7 @@
       }catch(err){
         console.error(err);
         alert('เกิดข้อผิดพลาดในการส่งข้อมูล กรุณาลองใหม่อีกครั้ง\n\nโปรดตรวจสอบ WEBHOOK_URL ใน CONFIG');
-        btn.innerHTML = orig; 
-        btn.disabled = false;
+        btn.innerHTML = orig; btn.disabled = false;
       }
     }
 
