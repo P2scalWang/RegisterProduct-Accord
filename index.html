@@ -1,410 +1,750 @@
 <!DOCTYPE html>
 <html lang="th">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>ลงทะเบียนรับประกันสินค้า</title>
-  <style>
-    * { margin:0; padding:0; box-sizing:border-box; }
-    body{
-      font-family:'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-      min-height:100vh; padding:20px; color:#1a1a2e;
-    }
-    .container{ max-width:720px; margin:0 auto; }
-    .header{ text-align:center; margin-bottom:40px; animation:fadeInDown 0.6s ease; }
-    .header h1{ color:#fff; font-size:2.5rem; font-weight:700; margin-bottom:10px; text-shadow:0 2px 20px rgba(0,0,0,0.1); }
-    .header p{ color:rgba(255,255,255,0.9); font-size:1.1rem; }
-    .form-card{ background:#fff; border-radius:24px; padding:40px; box-shadow:0 20px 60px rgba(0,0,0,0.3); animation:fadeInUp 0.6s ease; }
-    .form-group{ margin-bottom:28px; }
-    label{ display:block; font-weight:600; margin-bottom:10px; color:#2d3748; font-size:0.95rem; }
-    .required{ color:#e53e3e; margin-left:4px; }
-    input[type="text"], input[type="tel"], input[type="date"], select{
-      width:100%; padding:14px 18px; border:2px solid #e2e8f0; border-radius:12px; font-size:1rem; transition:.3s; background:#f7fafc;
-    }
-    input[type="text"]:focus, input[type="tel"]:focus, input[type="date"]:focus, select:focus{
-      outline:none; border-color:#667eea; background:#fff; box-shadow:0 0 0 4px rgba(102,126,234,.1);
-    }
-    select{ cursor:pointer; appearance:none; background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%23667eea' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E"); background-repeat:no-repeat; background-position:right 12px center; background-size:20px; padding-right:45px; }
-    .file-upload-wrapper{ position:relative; }
-    .file-upload-label{ display:flex; align-items:center; justify-content:center; padding:24px; border:3px dashed #cbd5e0; border-radius:12px; cursor:pointer; transition:.3s; background:#f7fafc; min-height:120px; }
-    .file-upload-label:hover{ border-color:#667eea; background:#edf2f7; }
-    .file-upload-label svg{ margin-right:12px; }
-    input[type="file"]{ display:none; }
-    .file-preview{ display:grid; grid-template-columns:repeat(auto-fill, minmax(120px, 1fr)); gap:12px; margin-top:12px; }
-    .preview-item{ position:relative; border-radius:8px; overflow:hidden; aspect-ratio:1; border:2px solid #e2e8f0; }
-    .preview-item img{ width:100%; height:100%; object-fit:cover; }
-    .preview-item button{ position:absolute; top:4px; right:4px; background:rgba(0,0,0,0.7); color:#fff; border:none; border-radius:50%; width:28px; height:28px; cursor:pointer; display:flex; align-items:center; justify-content:center; transition:.2s; }
-    .preview-item button:hover{ background:#e53e3e; transform:scale(1.1); }
-    .submit-btn{ width:100%; padding:16px; background:linear-gradient(135deg, #667eea 0%, #764ba2 100%); color:#fff; border:none; border-radius:12px; font-size:1.1rem; font-weight:600; cursor:pointer; transition:.3s; box-shadow:0 4px 15px rgba(102,126,234,0.4); }
-    .submit-btn:hover{ transform:translateY(-2px); box-shadow:0 8px 25px rgba(102,126,234,0.5); }
-    .submit-btn:active{ transform:translateY(0); }
-    .submit-btn:disabled{ opacity:.6; cursor:not-allowed; transform:none; }
-    .modal{ display:none; position:fixed; inset:0; background:rgba(0,0,0,.7); z-index:1000; animation:fadeIn .3s ease; }
-    .modal-content{ position:absolute; top:50%; left:50%; transform:translate(-50%, -50%); background:#fff; border-radius:20px; padding:40px; max-width:600px; width:90%; max-height:80vh; overflow-y:auto; animation:slideUp .4s ease; }
-    .modal-header{ display:flex; align-items:center; margin-bottom:24px; padding-bottom:20px; border-bottom:2px solid #e2e8f0; }
-    .modal-header svg{ margin-right:12px; flex-shrink:0; }
-    .modal-header h2{ color:#2d3748; font-size:1.5rem; }
-    .info-section{ background:#f7fafc; padding:20px; border-radius:12px; margin-bottom:20px; }
-    .info-section h3{ color:#667eea; margin-bottom:12px; font-size:1.1rem; }
-    .info-section ul{ list-style:none; padding-left:0; }
-    .info-section li{ padding:8px 0; padding-left:24px; position:relative; line-height:1.6; }
-    .info-section li:before{ content:"✓"; position:absolute; left:0; color:#667eea; font-weight:bold; }
-    .data-review{ margin-top:24px; }
-    .data-item{ display:flex; padding:12px 0; border-bottom:1px solid #e2e8f0; }
-    .data-label{ font-weight:600; color:#4a5568; min-width:150px; }
-    .data-value{ color:#2d3748; flex:1; }
-    .modal-actions{ display:flex; gap:12px; margin-top:28px; }
-    .btn{ flex:1; padding:14px; border-radius:10px; font-size:1rem; font-weight:600; cursor:pointer; transition:.3s; border:2px solid transparent; }
-    .btn-cancel{ background:#edf2f7; color:#4a5568; }
-    .btn-cancel:hover{ background:#e2e8f0; }
-    .btn-confirm{ background:linear-gradient(135deg, #667eea 0%, #764ba2 100%); color:#fff; box-shadow:0 4px 15px rgba(102,126,234,0.4); }
-    .btn-confirm:hover{ transform:translateY(-2px); box-shadow:0 8px 25px rgba(102,126,234,0.5); }
-    .btn-confirm:disabled{ opacity:.6; cursor:not-allowed; transform:none; }
-    .success-modal{ text-align:center; }
-    .success-icon{ width:80px; height:80px; background:linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius:50%; display:flex; align-items:center; justify-content:center; margin:0 auto 24px; }
-    .loading{ display:inline-block; width:20px; height:20px; border:3px solid rgba(255,255,255,.3); border-radius:50%; border-top-color:#fff; animation:spin .8s linear infinite; }
-    @keyframes fadeIn{ from{opacity:0} to{opacity:1} }
-    @keyframes fadeInDown{ from{opacity:0; transform:translateY(-20px)} to{opacity:1; transform:translateY(0)} }
-    @keyframes fadeInUp{ from{opacity:0; transform:translateY(20px)} to{opacity:1; transform:translateY(0)} }
-    @keyframes slideUp{ from{opacity:0; transform:translate(-50%, -45%)} to{opacity:1; transform:translate(-50%, -50%)} }
-    @keyframes spin{ to{ transform:rotate(360deg) } }
-    @media (max-width:640px){
-      .header h1{ font-size:1.8rem; }
-      .form-card{ padding:24px; }
-      .modal-content{ padding:24px; }
-      .data-item{ flex-direction:column; }
-      .data-label{ margin-bottom:4px; }
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The ICON Journey TEST</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=Prompt:wght@300;400;500;600&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --primary-color: #d5a745;
+            --primary-hover: #b58b30;
+            --text-header: #653924;
+            --text-main: #4a4a4a;
+            --bg-gradient-start: #ffffff;
+            --bg-gradient-end: #fdf5e6;
+            
+            --card-bg: #ffffff;
+            --border-color: #e0e0e0;
+            --input-bg: #f9f9f9;
+            --radius: 16px;
+            --shadow: 0 15px 40px rgba(101, 57, 36, 0.1);
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: 'Prompt', sans-serif;
+            background: linear-gradient(135deg, var(--bg-gradient-start) 0%, var(--bg-gradient-end) 100%);
+            color: var(--text-main);
+            line-height: 1.6;
+            min-height: 100vh;
+            padding: 40px 20px;
+        }
+
+        .container { max-width: 800px; margin: 0 auto; }
+
+        /* Header */
+        header { text-align: center; margin-bottom: 40px; }
+
+        .logo {
+            width: 280px; 
+            max-width: 100%;
+            height: auto; 
+            margin-bottom: 25px; 
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+            filter: drop-shadow(0 4px 6px rgba(0,0,0,0.1));
+        }
+        
+        h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 3.5rem;
+            color: var(--primary-color);
+            margin-bottom: 10px;
+            font-weight: 900;
+            letter-spacing: 1px;
+            text-shadow: 2px 2px 0px rgba(255, 255, 255, 1);
+        }
+        
+        .subtitle { 
+            color: var(--text-header); 
+            font-size: 1.2rem; 
+            font-weight: 500;
+            opacity: 0.9;
+        }
+
+        /* Form Container */
+        form {
+            background-color: var(--card-bg);
+            padding: 50px;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            border: 1px solid rgba(213, 167, 69, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Steps Animation */
+        .form-step {
+            display: none;
+            opacity: 0;
+            transition: opacity 0.5s ease-in-out, transform 0.5s ease;
+        }
+        .form-step.active { 
+            display: block; 
+            animation: fadeIn 0.8s forwards;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .section-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.8rem;
+            color: var(--text-header);
+            margin-bottom: 30px;
+            padding-bottom: 15px;
+            border-bottom: 3px solid var(--primary-color);
+            display: inline-block;
+            font-weight: 700;
+        }
+
+        /* Inputs */
+        .form-group { margin-bottom: 25px; }
+        label { display: block; margin-bottom: 8px; font-weight: 600; color: var(--text-header); }
+        
+        input[type="text"], input[type="number"], textarea {
+            width: 100%; padding: 15px; 
+            background-color: var(--input-bg);
+            border: 1px solid var(--border-color); 
+            border-radius: 8px;
+            color: var(--text-header); 
+            font-family: 'Prompt', sans-serif;
+            font-size: 1rem; 
+            transition: all 0.3s ease;
+        }
+        
+        input:focus, textarea:focus {
+            outline: none; 
+            border-color: var(--primary-color);
+            background-color: #fff;
+            box-shadow: 0 4px 15px rgba(213, 167, 69, 0.15);
+        }
+        textarea { resize: vertical; min-height: 100px; }
+
+        /* Quiz Styling */
+        .quiz-group { margin-bottom: 40px; }
+        .question { 
+            font-size: 1.2rem; 
+            font-weight: 600; 
+            margin-bottom: 20px; 
+            color: var(--text-header);
+        }
+        
+        .options-grid { display: grid; gap: 12px; }
+        
+        .radio-label {
+            display: flex; align-items: center; padding: 15px 20px;
+            background-color: #fff; 
+            border: 1px solid var(--border-color);
+            border-radius: 12px; 
+            cursor: pointer; 
+            transition: all 0.2s ease;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.03);
+        }
+        
+        .radio-label:hover { 
+            background-color: #fffcf5; 
+            border-color: var(--primary-color); 
+            transform: translateY(-2px);
+        }
+        
+        input[type="radio"] { display: none; }
+        
+        .radio-indicator {
+            width: 22px; height: 22px; 
+            border: 2px solid #ccc;
+            border-radius: 50%; margin-right: 15px; flex-shrink: 0;
+            display: flex; align-items: center; justify-content: center;
+        }
+        
+        .radio-indicator::after {
+            content: ''; width: 12px; height: 12px; 
+            background-color: var(--primary-color);
+            border-radius: 50%; opacity: 0; transform: scale(0); transition: all 0.2s;
+        }
+        
+        input[type="radio"]:checked + .radio-label { 
+            background-color: #fffcf0; 
+            border-color: var(--primary-color); 
+            box-shadow: 0 4px 12px rgba(213, 167, 69, 0.2);
+        }
+        input[type="radio"]:checked + .radio-label .radio-indicator { border-color: var(--primary-color); }
+        input[type="radio"]:checked + .radio-label .radio-indicator::after { opacity: 1; transform: scale(1); }
+        input[type="radio"]:checked + .radio-label .text-content { color: var(--text-header); font-weight: 600; }
+
+        /* Buttons */
+        .btn-group { margin-top: 40px; display: flex; gap: 15px; }
+
+        .btn-next, .btn-submit, .btn-back {
+            flex: 1; padding: 16px;
+            font-family: 'Prompt', sans-serif; font-size: 1.1rem; font-weight: 600;
+            border: none; border-radius: 50px; cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            text-transform: uppercase; letter-spacing: 0.5px;
+        }
+
+        .btn-next, .btn-submit {
+            background: var(--primary-color);
+            color: #fff;
+            box-shadow: 0 8px 20px rgba(213, 167, 69, 0.4);
+        }
+        
+        .btn-back {
+            background: transparent;
+            border: 2px solid #ddd;
+            color: #888;
+            max-width: 150px;
+        }
+
+        .btn-next:hover, .btn-submit:hover {
+            background-color: var(--primary-hover);
+            transform: translateY(-2px);
+            box-shadow: 0 12px 25px rgba(213, 167, 69, 0.5);
+        }
+        
+        .btn-back:hover {
+            border-color: var(--text-header);
+            color: var(--text-header);
+        }
+
+        /* Modal Result Styling */
+        .modal {
+            display: none; position: fixed; z-index: 9999; left: 0; top: 0;
+            width: 100%; height: 100%; overflow: auto;
+            background-color: rgba(101, 57, 36, 0.6);
+            backdrop-filter: blur(5px);
+            align-items: center; justify-content: center; opacity: 0; transition: opacity 0.3s ease;
+            padding: 20px;
+        }
+        .modal.show { display: flex; opacity: 1; }
+        
+        .modal-content {
+            background: #ffffff;
+            margin: auto; padding: 30px; 
+            border: 2px solid var(--primary-color);
+            width: 100%; max-width: 600px; border-radius: 20px; 
+            position: relative; 
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            transform: scale(0.8); transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            max-height: 90vh;
+            overflow-y: auto;
+            text-align: left;
+        }
+        .modal.show .modal-content { transform: scale(1); }
+        
+        .modal-content::-webkit-scrollbar { width: 8px; }
+        .modal-content::-webkit-scrollbar-track { background: #f1f1f1; border-radius: 10px; }
+        .modal-content::-webkit-scrollbar-thumb { background: #d5a745; border-radius: 10px; }
+
+        .close-btn {
+            color: #999; float: right; font-size: 28px;
+            font-weight: bold; position: sticky; top: 0; right: 0; cursor: pointer; z-index: 10;
+        }
+        .close-btn:hover { color: var(--primary-color); }
+        
+        .modal-header { text-align: center; margin-bottom: 20px; }
+        .result-emoji { font-size: 4rem; display: block; animation: bounce 2s infinite; margin-bottom: 10px; }
+        @keyframes bounce { 0%, 20%, 50%, 80%, 100% {transform: translateY(0);} 40% {transform: translateY(-20px);} 60% {transform: translateY(-10px);} }
+        
+        .result-title { 
+            font-family: 'Playfair Display', serif; 
+            font-size: 2rem; 
+            color: var(--primary-color); 
+            font-weight: 700;
+            line-height: 1.2;
+        }
+        
+        .result-traits { 
+            font-size: 1.1rem; 
+            font-weight: 600; 
+            color: var(--text-header); 
+            margin-top: 5px;
+        }
+
+        /* Result Content Styling */
+        .res-topic {
+            color: var(--primary-color);
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-top: 20px;
+            margin-bottom: 8px;
+            border-left: 4px solid var(--primary-color);
+            padding-left: 10px;
+        }
+        
+        .res-text { font-size: 0.95rem; color: #555; line-height: 1.6; margin-bottom: 10px; }
+        .res-keyword { background: #fffcf5; padding: 5px 10px; border-radius: 6px; color: var(--text-header); font-weight: 500; display: inline-block; margin-bottom: 15px; border: 1px solid #eee; }
+
+        /* Trick Box */
+        .trick-box {
+            background: linear-gradient(135deg, #fffcf0 0%, #fff 100%);
+            border: 1px dashed var(--primary-color);
+            border-radius: 12px;
+            padding: 20px;
+            margin-top: 25px;
+        }
+        .trick-header { color: var(--text-header); font-weight: 700; margin-bottom: 10px; display: flex; align-items: center; }
+        .trick-list { padding-left: 20px; margin: 0; }
+        .trick-list li { margin-bottom: 8px; color: #555; font-size: 0.95rem; }
+
+        .capture-hint { font-size: 0.8rem; color: #888; margin-top: 20px; text-align: center; display: block;}
+
+        @media (max-width: 600px) {
+            h1 { font-size: 2.2rem; }
+            form { padding: 25px; }
+            .btn-group { flex-direction: column-reverse; }
+            .btn-back { max-width: 100%; }
+            .modal-content { padding: 20px; }
+        }
+    </style>
 </head>
 <body>
-  <div class="container">
-    <div class="header">
-      <h1>📦 ลงทะเบียนรับประกันสินค้า</h1>
-      <p>กรุณากรอกข้อมูลให้ครบถ้วนเพื่อรับประกันสินค้า</p>
+
+    <div class="container">
+        <header>
+            <img src="https://raw.githubusercontent.com/P2scalWang/Image22amz/main/queen.png" alt="Queen Double Ent Logo" class="logo">
+            <h1>The ICON Journey</h1>
+            <p class="subtitle">ค้นหาตัวตนของคุณ เพื่อเส้นทางการไลฟ์ที่ใช่</p>
+        </header>
+
+        <form id="quizForm">
+            <div id="step1" class="form-step active">
+                <h2 class="section-title">01. ข้อมูลส่วนตัว</h2>
+                
+                <div class="form-group">
+                    <label>ชื่อ-นามสกุล <span style="color:red">*</span></label>
+                    <input type="text" name="fullname" required>
+                </div>
+                <div class="form-group">
+                    <label>ชื่อเล่น <span style="color:red">*</span></label>
+                    <input type="text" name="nickname" required>
+                </div>
+                <div class="form-group">
+                    <label>อายุ <span style="color:red">*</span></label>
+                    <input type="number" name="age" required>
+                </div>
+                <div class="form-group">
+                    <label>ชื่อ TikTok ที่ใช้ในการไลฟ์</label>
+                    <input type="text" name="tiktok_id" placeholder="@yourname">
+                </div>
+                <div class="form-group">
+                    <label>ช่วงเวลาที่ว่างในการไลฟ์</label>
+                    <input type="text" name="avail_time">
+                </div>
+                <div class="form-group">
+                    <label>เลขที่บัญชี (ธนาคาร / เลขบัญชี / ชื่อเจ้าของบัญชี)</label>
+                    <input type="text" name="bank_details">
+                </div>
+                <div class="form-group">
+                    <label>ID LINE</label>
+                    <input type="text" name="line_id">
+                </div>
+                <div class="form-group">
+                    <label>Instagram</label>
+                    <input type="text" name="ig_id">
+                </div>
+                <div class="form-group">
+                    <label>งานที่เคยทำ / ประสบการณ์</label>
+                    <textarea name="experience"></textarea>
+                </div>
+
+                <div class="btn-group">
+                    <button type="button" class="btn-next" onclick="goToStep(2)">ถัดไป (NEXT)</button>
+                </div>
+            </div>
+
+            <div id="step2" class="form-step">
+                <h2 class="section-title">02. ค้นหาตัวตน (Attitude Test)</h2>
+                <p style="color:#777; margin-bottom: 30px;">เลือกคำตอบที่ตรงกับความเป็นคุณมากที่สุด</p>
+
+                <div class="quiz-group">
+                    <p class="question">1. อะไรผลักดันให้คุณอยากไลฟ์มากที่สุด ? <span style="color:red">*</span></p>
+                    <div class="options-grid">
+                        <input type="radio" id="q1-f" name="q1" value="F" required><label for="q1-f" class="radio-label"><span class="radio-indicator"></span><span class="text-content">F. ต้องการแบ่งปันความสนุกและพลังบวก</span></label>
+                        <input type="radio" id="q1-g" name="q1" value="G"><label for="q1-g" class="radio-label"><span class="radio-indicator"></span><span class="text-content">G. อยากทำให้คนรู้สึกอบอุ่น สบายใจ</span></label>
+                        <input type="radio" id="q1-c" name="q1" value="C"><label for="q1-c" class="radio-label"><span class="radio-indicator"></span><span class="text-content">C. อยากมีพื้นที่สงบ พูดคุยเป็นตัวเอง</span></label>
+                        <input type="radio" id="q1-t" name="q1" value="T"><label for="q1-t" class="radio-label"><span class="radio-indicator"></span><span class="text-content">T. อยากสื่อสาร-แสดงความคิดของตัวเอง</span></label>
+                        <input type="radio" id="q1-a" name="q1" value="A"><label for="q1-a" class="radio-label"><span class="radio-indicator"></span><span class="text-content">A. อยากสร้างผลงานหรือโชว์ความคิดสร้างสรรค์</span></label>
+                    </div>
+                </div>
+                
+                <div class="quiz-group">
+                    <p class="question">2. ถ้าคุณเปิดไลฟ์ คนดูควร ”รู้สึกแบบไหน“ เกี่ยวกับคุณ ? <span style="color:red">*</span></p>
+                    <div class="options-grid">
+                        <input type="radio" id="q2-f" name="q2" value="F" required><label for="q2-f" class="radio-label"><span class="radio-indicator"></span><span class="text-content">F. สนุก เฮฮา อยู่ด้วยแล้วไม่เบื่อ</span></label>
+                        <input type="radio" id="q2-g" name="q2" value="G"><label for="q2-g" class="radio-label"><span class="radio-indicator"></span><span class="text-content">G. อบอุ่น เป็นพลังใจ</span></label>
+                        <input type="radio" id="q2-c" name="q2" value="C"><label for="q2-c" class="radio-label"><span class="radio-indicator"></span><span class="text-content">C. สงบ ชวนฟัง สบายหู</span></label>
+                        <input type="radio" id="q2-t" name="q2" value="T"><label for="q2-t" class="radio-label"><span class="radio-indicator"></span><span class="text-content">T. ฉลาด น่าสนใจ มีสาระ</span></label>
+                        <input type="radio" id="q2-a" name="q2" value="A"><label for="q2-a" class="radio-label"><span class="radio-indicator"></span><span class="text-content">A. มีเอกลักษณ์ งานสวย น่าหลงไหล</span></label>
+                    </div>
+                </div>
+
+                <div class="quiz-group">
+                    <p class="question">3. อะไรคือสิ่งที่คุณให้ความสำคัญที่สุดเวลาไลฟ์ ? <span style="color:red">*</span></p>
+                    <div class="options-grid">
+                        <input type="radio" id="q3-f" name="q3" value="F" required><label for="q3-f" class="radio-label"><span class="radio-indicator"></span><span class="text-content">F. ให้คนดูยิ้มและหัวเราะ</span></label>
+                        <input type="radio" id="q3-g" name="q3" value="G"><label for="q3-g" class="radio-label"><span class="radio-indicator"></span><span class="text-content">G. สร้างความรู้สึกดี ๆ ให้คนดู</span></label>
+                        <input type="radio" id="q3-c" name="q3" value="C"><label for="q3-c" class="radio-label"><span class="radio-indicator"></span><span class="text-content">C. พูดคุยแบบมีสติ และนุ่มนวล</span></label>
+                        <input type="radio" id="q3-t" name="q3" value="T"><label for="q3-t" class="radio-label"><span class="radio-indicator"></span><span class="text-content">T. การสื่อสารที่ชัดเจนและเข้าใจง่าย</span></label>
+                        <input type="radio" id="q3-a" name="q3" value="A"><label for="q3-a" class="radio-label"><span class="radio-indicator"></span><span class="text-content">A. ภาพรวมต้องสวยงาม และครีเอทีฟ</span></label>
+                    </div>
+                </div>
+
+                <div class="quiz-group">
+                    <p class="question">4. เวลาคุณอยู่ต่อหน้ากล้อง คุณเป็นคนแบบไหน ? <span style="color:red">*</span></p>
+                    <div class="options-grid">
+                        <input type="radio" id="q4-f" name="q4" value="F" required><label for="q4-f" class="radio-label"><span class="radio-indicator"></span><span class="text-content">F. แพรวพราว มีพลัง สนุก</span></label>
+                        <input type="radio" id="q4-g" name="q4" value="G"><label for="q4-g" class="radio-label"><span class="radio-indicator"></span><span class="text-content">G. ยิ้มง่าย อบอุ่น ละมุน</span></label>
+                        <input type="radio" id="q4-c" name="q4" value="C"><label for="q4-c" class="radio-label"><span class="radio-indicator"></span><span class="text-content">C. สุขุม เงียบ แต่จริงใจ</span></label>
+                        <input type="radio" id="q4-t" name="q4" value="T"><label for="q4-t" class="radio-label"><span class="radio-indicator"></span><span class="text-content">T. พูดเก่ง อธิบายดี</span></label>
+                        <input type="radio" id="q4-a" name="q4" value="A"><label for="q4-a" class="radio-label"><span class="radio-indicator"></span><span class="text-content">A. โพสต์สวย ทำภาพสวย ใส่ดีเทลเยอะ</span></label>
+                    </div>
+                </div>
+
+                <div class="quiz-group">
+                    <p class="question">5. สไตล์การพูดของคุณเป็นแบบไหนมากที่สุด ? <span style="color:red">*</span></p>
+                    <div class="options-grid">
+                        <input type="radio" id="q5-f" name="q5" value="F" required><label for="q5-f" class="radio-label"><span class="radio-indicator"></span><span class="text-content">F. ติดตลก ชวนหัวเราะ</span></label>
+                        <input type="radio" id="q5-g" name="q5" value="G"><label for="q5-g" class="radio-label"><span class="radio-indicator"></span><span class="text-content">G. นุ่มนวล ใส่ใจทุกคำพูด</span></label>
+                        <input type="radio" id="q5-c" name="q5" value="C"><label for="q5-c" class="radio-label"><span class="radio-indicator"></span><span class="text-content">C. เบา สงบ ไม่เร่งรีบ</span></label>
+                        <input type="radio" id="q5-t" name="q5" value="T"><label for="q5-t" class="radio-label"><span class="radio-indicator"></span><span class="text-content">T. ชัดเจน มีโครงเรื่อง</span></label>
+                        <input type="radio" id="q5-a" name="q5" value="A"><label for="q5-a" class="radio-label"><span class="radio-indicator"></span><span class="text-content">A. โชว์สิ่งของ / เทคนิคมากกว่าพูด</span></label>
+                    </div>
+                </div>
+
+                <div class="quiz-group">
+                    <p class="question">6. ภาพลักษณ์แบบไหนที่คุณอยากให้คนดูจำคุณได้ ? <span style="color:red">*</span></p>
+                    <div class="options-grid">
+                        <input type="radio" id="q6-f" name="q6" value="F" required><label for="q6-f" class="radio-label"><span class="radio-indicator"></span><span class="text-content">F. Entertainer สนุก ไม่เครียด</span></label>
+                        <input type="radio" id="q6-g" name="q6" value="G"><label for="q6-g" class="radio-label"><span class="radio-indicator"></span><span class="text-content">G. Soft Power ละมุนและมีเสน่ห์</span></label>
+                        <input type="radio" id="q6-c" name="q6" value="C"><label for="q6-c" class="radio-label"><span class="radio-indicator"></span><span class="text-content">C. Calm & Peaceful</span></label>
+                        <input type="radio" id="q6-t" name="q6" value="T"><label for="q6-t" class="radio-label"><span class="radio-indicator"></span><span class="text-content">T. Intellectual มีสาระ</span></label>
+                        <input type="radio" id="q6-a" name="q6" value="A"><label for="q6-a" class="radio-label"><span class="radio-indicator"></span><span class="text-content">A. Creative / Aesthetic</span></label>
+                    </div>
+                </div>
+
+                <div class="quiz-group">
+                    <p class="question">7. คอนเทนต์ที่คุณอยากไลฟ์มากที่สุดคือ ? <span style="color:red">*</span></p>
+                    <div class="options-grid">
+                        <input type="radio" id="q7-f" name="q7" value="F" required><label for="q7-f" class="radio-label"><span class="radio-indicator"></span><span class="text-content">F. เกม / ความสนุก / Reaction</span></label>
+                        <input type="radio" id="q7-g" name="q7" value="G"><label for="q7-g" class="radio-label"><span class="radio-indicator"></span><span class="text-content">G. แกะของ พูดคุย เบาสบาย</span></label>
+                        <input type="radio" id="q7-c" name="q7" value="C"><label for="q7-c" class="radio-label"><span class="radio-indicator"></span><span class="text-content">C. ASMR / Chill Talk</span></label>
+                        <input type="radio" id="q7-t" name="q7" value="T"><label for="q7-t" class="radio-label"><span class="radio-indicator"></span><span class="text-content">T. อธิบายความรู้ / เล่าเรื่อง</span></label>
+                        <input type="radio" id="q7-a" name="q7" value="A"><label for="q7-a" class="radio-label"><span class="radio-indicator"></span><span class="text-content">A. งานศิลป์ / แต่งหน้า / DIY</span></label>
+                    </div>
+                </div>
+
+                <div class="quiz-group">
+                    <p class="question">8. ถ้าต้องเลือกธีมไลฟ์ประจำตัว 1 แบบ คุณจะเลือกแบบไหน ? <span style="color:red">*</span></p>
+                    <div class="options-grid">
+                        <input type="radio" id="q8-f" name="q8" value="F" required><label for="q8-f" class="radio-label"><span class="radio-indicator"></span><span class="text-content">F. Variety สนุกทุกวัน</span></label>
+                        <input type="radio" id="q8-g" name="q8" value="G"><label for="q8-g" class="radio-label"><span class="radio-indicator"></span><span class="text-content">G. Soft Talk ไลฟ์ฟีลอบอุ่น</span></label>
+                        <input type="radio" id="q8-c" name="q8" value="C"><label for="q8-c" class="radio-label"><span class="radio-indicator"></span><span class="text-content">C. Relax ไลฟ์เรื่อย ๆ ชิล ๆ</span></label>
+                        <input type="radio" id="q8-t" name="q8" value="T"><label for="q8-t" class="radio-label"><span class="radio-indicator"></span><span class="text-content">T. Knowledge ไลฟ์ให้สาระ</span></label>
+                        <input type="radio" id="q8-a" name="q8" value="A"><label for="q8-a" class="radio-label"><span class="radio-indicator"></span><span class="text-content">A. Creative ไลฟ์โชว์งานหรือเทคนิค</span></label>
+                    </div>
+                </div>
+
+                <div class="quiz-group">
+                    <p class="question">9. เวลาคนดูทัก คุณตอบแบบไหน ? <span style="color:red">*</span></p>
+                    <div class="options-grid">
+                        <input type="radio" id="q9-f" name="q9" value="F" required><label for="q9-f" class="radio-label"><span class="radio-indicator"></span><span class="text-content">F. ตอบแบบเพื่อน พูดเล่นได้</span></label>
+                        <input type="radio" id="q9-g" name="q9" value="G"><label for="q9-g" class="radio-label"><span class="radio-indicator"></span><span class="text-content">G. ให้ความห่วงใย อบอุ่น</span></label>
+                        <input type="radio" id="q9-c" name="q9" value="C"><label for="q9-c" class="radio-label"><span class="radio-indicator"></span><span class="text-content">C. ตอบนุ่ม ๆ แบบใจเย็น</span></label>
+                        <input type="radio" id="q9-t" name="q9" value="T"><label for="q9-t" class="radio-label"><span class="radio-indicator"></span><span class="text-content">T. ตอบละเอียด อธิบายชัดเจน</span></label>
+                        <input type="radio" id="q9-a" name="q9" value="A"><label for="q9-a" class="radio-label"><span class="radio-indicator"></span><span class="text-content">A. ตอบพร้อมโชว์สิ่งที่กำลังทำ</span></label>
+                    </div>
+                </div>
+
+                <div class="quiz-group">
+                    <p class="question">10. ถ้าไลฟ์เงียบ คุณจะทำอย่างไร ? <span style="color:red">*</span></p>
+                    <div class="options-grid">
+                        <input type="radio" id="q10-f" name="q10" value="F" required><label for="q10-f" class="radio-label"><span class="radio-indicator"></span><span class="text-content">F. ลองพูดเรื่องสนุก ๆ ดึงพลัง</span></label>
+                        <input type="radio" id="q10-g" name="q10" value="G"><label for="q10-g" class="radio-label"><span class="radio-indicator"></span><span class="text-content">G. ถามไถ่คนดูด้วยความอ่อนโยน</span></label>
+                        <input type="radio" id="q10-c" name="q10" value="C"><label for="q10-c" class="radio-label"><span class="radio-indicator"></span><span class="text-content">C. พูดเรื่องเบา ๆ ให้บรรยากาศสบาย</span></label>
+                        <input type="radio" id="q10-t" name="q10" value="T"><label for="q10-t" class="radio-label"><span class="radio-indicator"></span><span class="text-content">T. ตั้งคำถามให้คนตอบ</span></label>
+                        <input type="radio" id="q10-a" name="q10" value="A"><label for="q10-a" class="radio-label"><span class="radio-indicator"></span><span class="text-content">A. ทำอะไรสวย ๆ ให้คนดูสนใจ</span></label>
+                    </div>
+                </div>
+
+                <div class="btn-group">
+                    <button type="button" class="btn-back" onclick="goToStep(1)">ย้อนกลับ</button>
+                    <button type="submit" id="submitBtn" class="btn-submit">ดูผลลัพธ์ของคุณ</button>
+                </div>
+            </div>
+        </form>
     </div>
 
-    <div class="form-card">
-      <!-- NOTE: we keep JS-driven submit to allow the confirm modal; enctype is for semantics -->
-      <form id="warrantyForm" enctype="multipart/form-data">
-        <div class="form-group">
-          <label>ชื่อ-นามสกุล<span class="required">*</span></label>
-          <input type="text" id="fullName" name="fullName" placeholder="กรอกชื่อ-นามสกุล" required />
+    <div id="resultModal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn">&times;</span>
+            <div class="modal-header">
+                <div id="resEmoji" class="result-emoji"></div>
+                <h2 id="resTitle" class="result-title"></h2>
+                <p id="resTraits" class="result-traits"></p>
+            </div>
+            <div id="resDesc" class="result-body"></div>
+            <p class="capture-hint">แคปหน้าจอเพื่อบันทึกผลลัพธ์ ICON ของคุณ</p>
         </div>
+    </div>
 
-        <div class="form-group">
-          <label>เบอร์โทรศัพท์<span class="required">*</span></label>
-          <input type="tel" id="phone" name="phone" placeholder="08X-XXX-XXXX" required />
-        </div>
+    <script>
+        // ใส่ URL ที่คุณให้มา
+        const WEBHOOK_URL = "https://script.google.com/macros/s/AKfycbyIPUlb5CFyplfAfhWWogrBMzcib62rb3D7QUFnKOoR-IKXdHcJRiU4ajAwRWm8LcfD/exec"; 
 
-        <div class="form-group">
-          <label>วันที่ซื้อสินค้า</label>
-          <input type="date" id="purchaseDate" name="purchaseDate" />
-        </div>
+        function goToStep(stepNumber) {
+            const step1 = document.getElementById('step1');
+            const step2 = document.getElementById('step2');
 
-        <!-- 🔁 แทนที่เฉพาะบล็อคนี้: รุ่นสินค้า -->
-        <div class="form-group">
-          <label>รุ่นสินค้า<span class="required">*</span></label>
+            if (stepNumber === 2) {
+                const inputs = step1.querySelectorAll('input[required]');
+                let isValid = true;
+                inputs.forEach(input => {
+                    if (!input.value.trim()) {
+                        isValid = false;
+                        input.style.borderColor = 'red';
+                    } else {
+                        input.style.borderColor = '#e0e0e0';
+                    }
+                });
 
-          <!-- แถวปุ่มแบบในภาพ -->
-          <div style="display:flex;gap:10px;margin-bottom:10px;">
-            <button type="button" onclick="loadProducts()" 
-                    style="display:inline-flex;align-items:center;gap:6px;padding:10px 12px;border-radius:10px;font-weight:600;border:2px solid #374151;background:#1f2937;color:#e5e7eb;cursor:pointer;">
-              รีเฟรช
-            </button>
-            <button type="button" id="btnModelToggle" onclick="toggleModelInput()" 
-                    style="display:inline-flex;align-items:center;gap:6px;padding:10px 12px;border-radius:10px;font-weight:600;border:2px solid #374151;background:#1f2937;color:#e5e7eb;cursor:pointer;">
-              พิมพ์เอง
-            </button>
-          </div>
+                if (!isValid) {
+                    alert('กรุณากรอกข้อมูลสำคัญ (ที่มีเครื่องหมาย *) ให้ครบถ้วน');
+                    return;
+                }
 
-          <!-- โหมดเลือกจากรายการ -->
-          <select id="productModel" name="productModel" required>
-            <option value="">กำลังโหลดข้อมูล...</option>
-          </select>
+                step1.classList.remove('active');
+                setTimeout(() => {
+                    step2.classList.add('active');
+                    // Smooth scroll to top of form
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                }, 100);
+            } 
+            else if (stepNumber === 1) {
+                step2.classList.remove('active');
+                setTimeout(() => {
+                    step1.classList.add('active');
+                    // Smooth scroll to top of form
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                }, 100);
+            }
+        }
 
-          <!-- โหมดพิมพ์เอง (เริ่มซ่อน) -->
-          <input type="text" id="productModelInput" placeholder="พิมพ์รุ่นสินค้าเอง"
-                 style="display:none;width:100%;padding:14px 18px;border:2px solid #e2e8f0;border-radius:12px;background:#f7fafc;margin-top:0;" />
-        </div>
+        document.addEventListener('DOMContentLoaded', function() {
+            const form = document.getElementById('quizForm');
+            const modal = document.getElementById('resultModal');
+            const closeBtn = document.querySelector('.close-btn');
+            const submitBtn = document.getElementById('submitBtn');
 
-        <script>
-          /* สคริปต์เฉพาะบล็อคนี้: toggle พิมพ์เอง/เลือก + sync ให้โค้ดเดิมอ่านจาก #productModel ได้ */
-          (function () {
-            window.toggleModelInput = function () {
-              const sel = document.getElementById('productModel');
-              const inp = document.getElementById('productModelInput');
-              const btn = document.getElementById('btnModelToggle');
-              const customOn = inp.style.display !== 'none';
-
-              if (customOn) {
-                // กลับไปเลือกจากรายการ
-                inp.style.display = 'none';
-                inp.required = false;
-                sel.style.display = '';
-                sel.required = true;
-                btn.textContent = 'พิมพ์เอง';
-              } else {
-                // ไปโหมดพิมพ์เอง
-                sel.style.display = 'none';
-                sel.required = false;
-                inp.style.display = '';
-                inp.required = true;
-                if (!inp.value) inp.value = sel.value || '';
-                btn.textContent = 'กลับไปเลือก';
-                syncToSelect(); // ให้ค่าไปอยู่ใน select ด้วย
-              }
+            // ผลลัพธ์พร้อมเนื้อหาใหม่
+            const resultsData = {
+                F: {
+                    title: "ICON of Fun (F)",
+                    emoji: "🎉",
+                    traits: "ร่าเริง สนุก | Variety, Game, Entertain",
+                    desc: `
+                        <div class="res-keyword">คีย์เวิร์ด: ร่าเริง สนุก สนุกก่อนค่อยคิดทีหลัง / Energy คนมองแล้วยิ้ม</div>
+                        <div class="res-topic">ตัวตนด้านใน</div>
+                        <div class="res-text">เป็นคนอารมณ์ดี หัวเราะง่าย ชอบสร้างบรรยากาศให้คนรอบตัวมีความสุข เวลามีคนอยู่รอบตัวจะยิ่งมีพลัง เหมือนแบตชาร์จจากเสียงหัวเราะและคอมเมนต์ ไม่ชอบความตึงเครียดหรือบรรยากาศเครียด ๆ นาน ๆ เป็นพวก “พร้อมเล่นตลอดเวลา” ชอบเกม ชอบชาเลนจ์ ชอบอะไรที่ไม่จำเจ</div>
+                        <div class="res-topic">ฟีลเวลาไลฟ์</div>
+                        <div class="res-text">ไลฟ์เต็มไปด้วยเสียงหัวเราะ เล่นมุก พูดคุยแบบเพื่อน ชอบเล่นเกมกับคนดู, Spin Wheel, ทายคำ, เกมตอบคำถาม, โหวต เหมาะกับไลฟ์ที่มี Interaction สูง เช่น Variety, เกม, Challenge, Reaction ฮา ๆ</div>
+                        <div class="res-topic">จุดแข็ง</div>
+                        <div class="res-text">คนดูจะรู้สึกว่า “อยากกลับมาอีก” เพราะสนุก สร้างคอมมูนิตี้ได้ง่าย คนดูจะรู้สึกเป็นเพื่อน เป็นตัวดึงบรรยากาศห้องให้ไม่เงียบ</div>
+                        <div class="res-topic">สิ่งที่ต้องระวัง</div>
+                        <div class="res-text">เล่นเพลินจนลืมโฟกัสเป้าหมาย (ยอด / สคริปต์หลักของไลฟ์) บางทีสนุกเกินไปจนขาดโครงสร้าง ต้องระวังมุกที่อาจไปแตะเส้นกฎแพลตฟอร์ม</div>
+                        <div class="trick-box">
+                            <div class="trick-header">✔ ทริคของครีเอเตอร์สาย Fun ให้ได้ของขวัญมากขึ้น</div>
+                            <ul class="trick-list">
+                                <li>ทำ Challenge ที่มีผลลัพธ์ชัดเจนเมื่อได้รับ Gift เช่น “ได้ดอกไม้ 1 อัน = เปิดสุ่ม 1 ครั้ง” หรือ “ครบ 5 ดอก = ทำท่าฮา ๆ / เปิดไข่สุ่ม”</li>
+                                <li>สร้างเกมให้คนดูมีส่วนร่วม เช่น Spin wheel หรือ ทายคำ ถ้าทายไม่ได้ผู้จัดต้องโดนลงโทษ</li>
+                                <li>ใช้เสียง Reaction ตลก ๆ ตอนรับของขวัญ → เพิ่ม dopamine ให้คนดู</li>
+                                <li>พูดขอบคุณแบบสดใส เช่น “ขอบคุณค้าบบบบ ใครให้คือหล่อมากกกวันนี้!”</li>
+                                <li>ให้คนดูรู้สึกว่า ของขวัญคือส่วนหนึ่งของเกม</li>
+                            </ul>
+                        </div>
+                    `
+                },
+                G: {
+                    title: "ICON of Glow (G)",
+                    emoji: "✨",
+                    traits: "มั่นใจ เปล่งประกาย | Beauty, Lifestyle, Self-love",
+                    desc: `
+                        <div class="res-keyword">คีย์เวิร์ด: มั่นใจ เปล่งประกาย มีเสน่ห์แบบ “ฉันรักตัวเองและดูแลตัวเอง”</div>
+                        <div class="res-topic">ตัวตนด้านใน</div>
+                        <div class="res-text">เป็นคนที่ใส่ใจภาพลักษณ์ แต่ไม่ใช่แค่สวยภายนอก แต่อยากให้ตัวเอง “ดูดีจากข้างใน” เชื่อในพลังของการพัฒนาตัวเอง ทั้งเรื่องบุคลิก ทัศนคติ ไลฟ์สไตล์ ชอบแชร์สิ่งที่ตัวเองลองแล้ว เช่น สกินแคร์, เมคอัพ, แฟชั่น, กาแฟที่ชอบ, คาเฟ่โปรด มีความมั่นใจในตัวเองระดับหนึ่ง และอยากส่งต่อความมั่นใจนั้นให้คนอื่นด้วย</div>
+                        <div class="res-topic">ฟีลเวลาไลฟ์</div>
+                        <div class="res-text">บรรยากาศเหมือนมานั่งคุยกับเพื่อนสวย ๆ ที่เราอยากเป็นแบบเขา เล่าไลฟ์สไตล์, Get ready with me, แต่งหน้า, แต่งตัว, จัดมุมห้อง, รีวิวของที่ใช้จริง พูดเรื่อง Self-love, การดูแลตัวเอง, การตั้งมาตรฐานชีวิต</div>
+                        <div class="res-topic">จุดแข็ง</div>
+                        <div class="res-text">ดึงดูดคนที่ “อยากพัฒนาตัวเอง” ได้ดีมาก เหมาะกับงาน Beauty, Lifestyle, รีวิวสินค้า, แบรนด์คอลแลป เป็นแรงบันดาลใจให้คนดูอยากลุกขึ้นมาดูแลตัวเอง</div>
+                        <div class="res-topic">สิ่งที่ต้องระวัง</div>
+                        <div class="res-text">ถ้าเน้นภาพลักษณ์มากเกินไป อาจทำให้บางคนรู้สึก “ไกลตัว” ต้องบาลานซ์ความสวยกับความเป็นคนธรรมดา ให้ยังรู้สึกเข้าถึงได้</div>
+                        <div class="trick-box">
+                            <div class="trick-header">✔ ทริคครีเอเตอร์สาย Glow ให้ได้ของขวัญมากขึ้น</div>
+                            <ul class="trick-list">
+                                <li>ทำ Glow Goals: “ครบ 10 ดอก = เปลี่ยนลุคแต่งหน้า live”</li>
+                                <li>ใช้บุคลิกมั่นใจแต่สุภาพให้เป็นประโยชน์ เช่น “วันนี้กำลังใจน้อยหน่อย ขอ 1 ดอกเรียกพลังค่ะ ✨”</li>
+                                <li>ทำมุมกล้อง แสง ให้สวย → ความ aesthetic กระตุ้นของขวัญ</li>
+                                <li>แชร์ Self-love moment เช่น “ถ้าวันนี้ได้ 20 ดอก จะให้ดูไอเท็มลับที่ยังไม่เคยบอกใครค่ะ 💖”</li>
+                                <li>ใช้เสียงขอบคุณที่ฟังอบอุ่นและมั่นใจ เช่น “ขอบคุณนะคะ น่ารักที่สุดเลยค่ะคุณ ✨”</li>
+                            </ul>
+                        </div>
+                    `
+                },
+                C: {
+                    title: "ICON of Calm (C)",
+                    emoji: "🌷",
+                    traits: "ละมุน มีสติ | Healing, Soft Talk, Mindful",
+                    desc: `
+                        <div class="res-keyword">คีย์เวิร์ด: ละมุน มีสติ ฟังแล้วใจนุ่ม / เป็นพื้นที่ปลอดภัย</div>
+                        <div class="res-topic">ตัวตนด้านใน</div>
+                        <div class="res-text">เป็นคนฟังเก่ง รับฟังปัญหาคนอื่นได้ดี ไม่ชอบดราม่า ไม่ชอบการเผชิญหน้า ใช้ความนุ่มและสติแก้สิ่งต่าง ๆ มักจะเติบโตมาพร้อมการเยียวยาตัวเอง เลยเข้าใจความรู้สึกของคนที่เจ็บ / เหนื่อยง่าย คำพูดจะมีน้ำหนัก เพราะมาจากประสบการณ์+การทบทวนตัวเอง</div>
+                        <div class="res-topic">ฟีลเวลาไลฟ์</div>
+                        <div class="res-text">ไฟ/เสียง/บรรยากาศจะนุ่ม เหมือนเปิดไลฟ์แล้ว “ใจมันช้าลง” พูดเรื่อง Healing, ความคิด, ความรู้สึก, ชีวิต, การพักใจ ให้คำแนะนำ ให้กำลังใจ รับฟังเรื่องของคนดูแบบจริงใจ</div>
+                        <div class="res-topic">จุดแข็ง</div>
+                        <div class="res-text">สร้างความผูกพันลึกกับคนดูได้ดีมาก คนดูจะรู้สึกว่า ‘ไว้ใจได้’ เหมาะกับไลฟ์ปรึกษา, Soft talk, Mindfulness, Tarot แบบละมุน, เขียน journal, ASMR พูดเบา ๆ คนดูจะเปิดไลฟ์ไว้เป็น “ที่พิงใจ”</div>
+                        <div class="res-topic">สิ่งที่ต้องระวัง</div>
+                        <div class="res-text">พลังอาจแผ่วไปสำหรับคนที่ชอบความตื่นเต้น ถ้าเนื้อหา down เกินไปบ่อย ๆ อาจดึงอารมณ์ทั้งห้องให้หน่วง ต้องหาจังหวะโยนแสง “ความหวัง” แทรกไปเสมอ</div>
+                        <div class="trick-box">
+                            <div class="trick-header">✔ ทริคของครีเอเตอร์สาย Calm ให้ได้ของขวัญมากขึ้น</div>
+                            <ul class="trick-list">
+                                <li>ใช้คำขอบคุณนุ่ม ๆ เช่น “ขอบคุณสำหรับพลังงานดี ๆ นะคะ ดอกนี้ทำให้ใจอุ่นขึ้นเลยค่ะ 🌷”</li>
+                                <li>ทำ Healing Ritual: “ครบ 5 ดอกวันนี้ เราจะทำช่วง Affirmation พิเศษนะคะ”</li>
+                                <li>ให้คนดูรู้สึกว่า ของขวัญ = การเติมพลังให้ห้อง</li>
+                                <li>ทำกิจกรรม Soft แบบตอบแทน เช่น “ทุกดอกไม้ = ฉันจะอ่านข้อความกำลังใจให้คุณหนึ่งประโยค”</li>
+                                <li>คนดูของกลุ่ม Calm ชอบ atmosphere → จัดองค์ประกอบให้ละมุน</li>
+                            </ul>
+                        </div>
+                    `
+                },
+                T: {
+                    title: "ICON of Talk (T)",
+                    emoji: "🎤",
+                    traits: "สื่อสารดี มีเสน่ห์ | Talk Show, Storytelling, Advice",
+                    desc: `
+                        <div class="res-keyword">คีย์เวิร์ด: สื่อสารดี มีเสน่ห์ พูดเก่ง เล่าเรื่องสนุก</div>
+                        <div class="res-topic">ตัวตนด้านใน</div>
+                        <div class="res-text">คิดเร็ว พูดคล่อง เล่าเรื่องเป็น เหมือนคนที่เพื่อนอยากให้เล่าทุกเรื่อง ชอบแบ่งปันความรู้หรือประสบการณ์ของตัวเอง เวลาเล่าเรื่องจะวางโครงในหัวได้เองโดยไม่รู้ตัว สนุกกับการเห็นคนฟัง “อ๋อ” หรือ “ได้อะไรกลับไป”</div>
+                        <div class="res-topic">ฟีลเวลาไลฟ์</div>
+                        <div class="res-text">เหมือนดู Talk Show / พอดแคสต์แบบมีภาพ เล่าเรื่องชีวิต, เรื่องงาน, มุมมอง, ประสบการณ์, เคสจริง ดูดคนดูด้วยเรื่องเล่า, การตั้งคำถาม, การให้มุมมอง</div>
+                        <div class="res-topic">จุดแข็ง</div>
+                        <div class="res-text">เหมาะกับคอนเทนต์ให้ความรู้ / เล่าเคส / แบ่งปันประสบการณ์ ทำ Live Q&A ได้ดีมาก คนดูจะรู้สึกว่า “ได้ทั้งสาระและเพื่อนคุย”</div>
+                        <div class="res-topic">สิ่งที่ต้องระวัง</div>
+                        <div class="res-text">พูดเยอะจนกลายเป็นสอน/เทศน์เกินไป ถ้าไม่บาลานซ์โทนอารมณ์ ต้องระวังไม่ให้ข้อมูล overload – คนดูงง อาจต้องมี Visual/โน้ตหรือจุดจับ เพื่อให้คนตามทัน</div>
+                        <div class="trick-box">
+                            <div class="trick-header">✔ ทริคของครีเอเตอร์สาย Talk ให้ได้ของขวัญมากขึ้น</div>
+                            <ul class="trick-list">
+                                <li>ทำ “Story Unlock”: “ถ้าได้ 3 ดอก จะเล่าต่ออีกหนึ่งพาร์ทนะคะ”</li>
+                                <li>ทำ Mini Advice Session: “ครบ 5 ดอก = เปิดช่วงให้คำแนะนำส่วนตัว 1 คน”</li>
+                                <li>ใช้น้ำเสียงจริงใจและชัดเจน ใช้ประโยชน์จากการตั้งคำถาม เช่น “เรื่องนี้คุณคิดยังไง? ถ้าอยากให้เล่าต่อ ส่งดอกคุยกับเราได้นะคะ”</li>
+                                <li>คนกลุ่มนี้ได้ของขวัญจากความรู้สึกว่า “เขาให้คุณค่าเรา”</li>
+                            </ul>
+                        </div>
+                    `
+                },
+                A: {
+                    title: "ICON of Art (A)",
+                    emoji: "🎨",
+                    traits: "สร้างสรรค์ มีเอกลักษณ์ | Music, Drawing, DIY, Performance",
+                    desc: `
+                        <div class="res-keyword">คีย์เวิร์ด: สร้างสรรค์ มีเอกลักษณ์ “ฉันจะเล่าเรื่องผ่านงานของฉัน”</div>
+                        <div class="res-topic">ตัวตนด้านใน</div>
+                        <div class="res-text">ชอบสร้างสิ่งใหม่ ๆ ไม่ชอบอะไรที่เหมือนใคร มักคิดเป็นภาพ เสียง หรือ movement มากกว่าคำพูด ใช้ศิลปะ/การแสดง/ดนตรี/ไพ่/การเต้น เป็นภาษาของตัวเอง อาจจะเป็นคนเก็บตัวหน่อย แต่เวลาได้แสดงงานของตัวเองจะเปล่งประกายมาก</div>
+                        <div class="res-topic">ฟีลเวลาไลฟ์</div>
+                        <div class="res-text">เหมือน “นั่งดูศิลปินทำงานใกล้ ๆ” เล่นดนตรี, ร้องเพลง, เต้น, วาดรูป, วาด tarot aesthetic, ทำ DIY, ทำ craft มีความ unique สูง คนดูจะรู้สึกว่าไลฟ์นี้ไม่เหมือนห้องอื่น</div>
+                        <div class="res-topic">จุดแข็ง</div>
+                        <div class="res-text">แตกต่างชัดเจน สามารถสร้าง character ได้แรงมาก มีโอกาสต่อยอดไปทางคอนเทนต์ YouTube, Clip, Reels, Brand collab ถ้าจับ mood & tone ดี จะกลายเป็น “ห้องที่มาแล้วรู้สึกสวย/เท่/ขลัง”</div>
+                        <div class="res-topic">สิ่งที่ต้องระวัง</div>
+                        <div class="res-text">บางครั้งตั้งใจทำงานมากจนลืมพูด หรือ interact กับคนดู งานอาจเฉพาะทาง คนดูใหม่อาจต้องใช้เวลาทำความรู้จัก ต้องออกแบบวิธี “เล่าเรื่อง” ผ่านงาน เพื่อให้คนดูเข้าใจและรู้สึกอินไปด้วย</div>
+                        <div class="trick-box">
+                            <div class="trick-header">✔ ทริคของครีเอเตอร์สาย Art ให้ได้ของขวัญมากขึ้น</div>
+                            <ul class="trick-list">
+                                <li>ทำ “Art for Gift”: “ครบ 3 ดอก = วาดดอกไม้ 1 ดอกให้คุณนะคะ” หรือ “ครบ 10 ดอก = ร้องเพลงโปรดหนึ่งเพลง”</li>
+                                <li>ตั้ง Stage Mood ให้มีความ aesthetic → กระตุ้นให้คนอยากให้</li>
+                                <li>ใช้สีไฟ/บรรยากาศช่วยให้ไลฟ์มี Character</li>
+                                <li>หากเป็น Tarot → ทำเป็น Mystical Gift Ritual</li>
+                                <li>ทำกิจกรรม “เลือกสีดอกไม้แล้วฉันวาดให้”</li>
+                            </ul>
+                        </div>
+                    `
+                }
             };
 
-            function syncToSelect() {
-              const sel = document.getElementById('productModel');
-              const inp = document.getElementById('productModelInput');
-              let opt = sel.querySelector('option[data-custom="1"]');
-              if (!opt) {
-                opt = document.createElement('option');
-                opt.setAttribute('data-custom', '1');
-                sel.appendChild(opt);
-              }
-              const v = (inp.value || '').trim();
-              opt.value = v;
-              opt.textContent = v || '—  —';
-              sel.value = v; // ให้โค้ดเดิมอ่านค่าได้จาก #productModel
+            form.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                // เปลี่ยนปุ่มเป็น Loading
+                const originalBtnText = submitBtn.innerText;
+                submitBtn.innerText = "กำลังประมวลผล...";
+                submitBtn.disabled = true;
+
+                const formData = new FormData(form);
+                const dataObj = {};
+                const scores = { F: 0, G: 0, C: 0, T: 0, A: 0 };
+
+                // เก็บข้อมูลจาก Form และคำนวณคะแนน
+                for (let [key, value] of formData.entries()) {
+                    dataObj[key] = value;
+                    if (['q1','q2','q3','q4','q5','q6','q7','q8','q9','q10'].includes(key)) {
+                        if (scores.hasOwnProperty(value)) scores[value]++;
+                    }
+                }
+
+                // หาผลลัพธ์ที่คะแนนสูงสุด
+                let maxScore = 0;
+                let resultKey = 'F'; 
+                for (const [key, value] of Object.entries(scores)) {
+                    if (value > maxScore) {
+                        maxScore = value;
+                        resultKey = key;
+                    }
+                }
+
+                // ส่งข้อมูลไป Webhook (Google Sheet)
+                fetch(WEBHOOK_URL, {
+                    method: 'POST',
+                    mode: 'no-cors',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(dataObj)
+                }).then(() => {
+                    console.log("Data sent to sheet");
+                }).catch(err => console.error("Error sending data:", err));
+
+                // แสดง Modal ผลลัพธ์
+                const data = resultsData[resultKey];
+                document.getElementById('resTitle').textContent = data.title;
+                document.getElementById('resEmoji').textContent = data.emoji;
+                document.getElementById('resTraits').textContent = data.traits;
+                document.getElementById('resDesc').innerHTML = data.desc;
+
+                modal.classList.add('show');
+                
+                // คืนค่าปุ่ม
+                submitBtn.innerText = originalBtnText;
+                submitBtn.disabled = false;
+            });
+
+            // ฟังก์ชันปิด Modal แล้วเด้งกลับไปหน้าแรก (Reset & Go to Step 1)
+            const closeModalAndReset = () => {
+                modal.classList.remove('show'); // ปิด Modal
+                form.reset(); // ล้างค่าในฟอร์มทั้งหมด
+                goToStep(1); // กลับไปหน้าแรก (Step 1)
+            };
+
+            closeBtn.onclick = closeModalAndReset;
+            window.onclick = (e) => { 
+                if (e.target == modal) {
+                    closeModalAndReset();
+                }
             }
-
-            document.getElementById('productModelInput')
-                    .addEventListener('input', syncToSelect);
-          })();
-        </script>
-        <!-- 🔁 จบส่วนที่แก้ -->
-
-        <div class="form-group">
-          <label>Serial Number<span class="required">*</span></label>
-          <input type="text" id="serialNumber" name="serialNumber" placeholder="กรอก Serial Number" required />
-        </div>
-
-        <div class="form-group">
-          <label>รูปถ่าย Serial Number<span class="required">*</span></label>
-          <div class="file-upload-wrapper">
-            <label for="serialPhotos" class="file-upload-label">
-              <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#667eea" stroke-width="2">
-                <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path>
-                <circle cx="12" cy="13" r="4"></circle>
-              </svg>
-              <div>
-                <div style="font-weight:600;color:#667eea;margin-bottom:4px;">คลิกเพื่อถ่ายรูปหรืออัปโหลด</div>
-                <div style="font-size:.85rem;color:#718096;">สามารถเลือกได้หลายรูป</div>
-              </div>
-            </label>
-            <!-- IMPORTANT: add name so FormData(form) includes it automatically -->
-            <input type="file" id="serialPhotos" name="serialPhotos" accept="image/*" multiple capture="environment" />
-            <div id="photoPreview" class="file-preview"></div>
-          </div>
-        </div>
-
-        <div class="form-group">
-          <label>ซื้อจากตัวแทนไหน (ถ้ามี)</label>
-          <input type="text" id="dealer" name="dealer" placeholder="ชื่อตัวแทนหรือร้านค้า" />
-        </div>
-
-        <button type="submit" class="submit-btn">ส่งข้อมูลลงทะเบียน</button>
-      </form>
-    </div>
-  </div>
-
-  <!-- Confirmation Modal -->
-  <div id="confirmModal" class="modal">
-    <div class="modal-content">
-      <div class="modal-header">
-        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#667eea" stroke-width="2">
-          <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
-          <polyline points="22 4 12 14.01 9 11.01"></polyline>
-        </svg>
-        <h2>ยืนยันการส่งข้อมูล</h2>
-      </div>
-
-      <div class="info-section">
-        <h3>📋 เงื่อนไขการรับประกัน</h3>
-        <ul>
-          <li>สินค้าต้องอยู่ในสภาพสมบูรณ์ ไม่มีร่องรอยการแกะหรือดัดแปลง</li>
-          <li>Serial Number ต้องตรงกับเครื่องที่ลงทะเบียน</li>
-          <li>การรับประกันครอบคลุมตามเงื่อนไขของผู้ผลิตเท่านั้น</li>
-          <li>กรุณาเก็บหลักฐานการซื้อไว้เพื่อใช้ในการเคลม</li>
-          <li>ข้อมูลที่ให้ไว้จะถูกใช้เพื่อการบริการหลังการขายเท่านั้น</li>
-        </ul>
-      </div>
-
-      <div class="data-review">
-        <h3 style="color:#2d3748;margin-bottom:16px;">ตรวจสอบข้อมูลของคุณ</h3>
-        <div id="reviewData"></div>
-      </div>
-
-      <div class="modal-actions">
-        <button type="button" class="btn btn-cancel" onclick="closeModal()">แก้ไขข้อมูล</button>
-        <button type="button" class="btn btn-confirm" onclick="confirmSubmit()">ยืนยันและส่งข้อมูล</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- Success Modal -->
-  <div id="successModal" class="modal">
-    <div class="modal-content success-modal">
-      <div class="success-icon">
-        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3">
-          <polyline points="20 6 9 17 4 12"></polyline>
-        </svg>
-      </div>
-      <h2 style="color:#2d3748;margin-bottom:12px;">ลงทะเบียนสำเร็จ!</h2>
-      <p style="color:#718096;margin-bottom:28px;">ข้อมูลของคุณถูกส่งเรียบร้อยแล้ว</p>
-      <button type="button" class="btn btn-confirm" onclick="location.reload()">ลงทะเบียนใหม่</button>
-    </div>
-  </div>
-
-  <script>
-    // ============ CONFIG SECTION ============
-    const CONFIG = {
-      SHEETS_URL: 'https://docs.google.com/spreadsheets/d/1ZtdHKJXKB4UStnrib-zn6vtO3j2ZZWrRINZ6fKzflvA/export?format=csv&gid=332563834',
-      WEBHOOK_URL: 'https://n8n.srv1038568.hstgr.cloud/webhook/ProOutput'
-    };
-    // ========================================
-
-    let selectedFiles = [];
-    let reviewCache = {};
-
-    // Load product models (Column A from CSV)
-    async function loadProducts(){
-      const select = document.getElementById('productModel');
-      try{
-        select.innerHTML = '<option value="">กำลังโหลด...</option>';
-        const res = await fetch(CONFIG.SHEETS_URL);
-        const csv = await res.text();
-        const lines = csv.split('\n');
-        const products = [];
-        for(let i=1;i<lines.length;i++){
-          const line = lines[i].trim();
-          if(!line) continue;
-          const cols = line.split(',');
-          const model = (cols[0]||'').replace(/^"(.+)"$/, '$1').trim();
-          if(model) products.push(model);
-        }
-        select.innerHTML = '<option value="">-- เลือกรุ่นสินค้า --</option>';
-        products.forEach(m=>{
-          const opt = document.createElement('option');
-          opt.value = m; opt.textContent = m; select.appendChild(opt);
         });
-      }catch(err){
-        console.error(err);
-        select.innerHTML = '<option value="">ไม่สามารถโหลดข้อมูลได้</option>';
-        alert('ไม่สามารถโหลดรายการสินค้าได้ กรุณาตรวจสอบ Google Sheets URL');
-      }
-    }
-    window.addEventListener('load', loadProducts);
+    </script>
 
-    // File handling
-    const fileInput = document.getElementById('serialPhotos');
-    fileInput.addEventListener('change', (e)=>{
-      const files = Array.from(e.target.files);
-      // Optional: limit number or size here if needed
-      selectedFiles = [...selectedFiles, ...files];
-      updatePhotoPreview();
-      // clear the input so the same file can be re-selected later
-      fileInput.value = '';
-    });
-
-    function updatePhotoPreview(){
-      const preview = document.getElementById('photoPreview');
-      preview.innerHTML = '';
-      selectedFiles.forEach((file, idx)=>{
-        const url = URL.createObjectURL(file);
-        const div = document.createElement('div');
-        div.className = 'preview-item';
-        div.innerHTML = `
-          <img src="${url}" alt="Preview" />
-          <button type="button" aria-label="remove" onclick="removePhoto(${idx})">&times;</button>
-        `;
-        preview.appendChild(div);
-      });
-    }
-    function removePhoto(index){
-      selectedFiles.splice(index,1); updatePhotoPreview();
-    }
-
-    // Intercept submit to open confirm modal
-    document.getElementById('warrantyForm').addEventListener('submit', (e)=>{
-      e.preventDefault();
-      if(selectedFiles.length === 0){
-        alert('กรุณาอัปโหลดรูปถ่าย Serial Number อย่างน้อย 1 รูป');
-        return;
-      }
-      reviewCache = {
-        fullName: document.getElementById('fullName').value,
-        phone: document.getElementById('phone').value,
-        purchaseDate: document.getElementById('purchaseDate').value || '-',
-        productModel: document.getElementById('productModel').value,
-        serialNumber: document.getElementById('serialNumber').value,
-        dealer: document.getElementById('dealer').value || '-',
-        photoCount: selectedFiles.length,
-        submittedAt: new Date().toLocaleString('th-TH')
-      };
-      const reviewHtml = `
-        <div class="data-item"><div class="data-label">ชื่อ-นามสกุล:</div><div class="data-value">${reviewCache.fullName}</div></div>
-        <div class="data-item"><div class="data-label">เบอร์โทรศัพท์:</div><div class="data-value">${reviewCache.phone}</div></div>
-        <div class="data-item"><div class="data-label">วันที่ซื้อสินค้า:</div><div class="data-value">${reviewCache.purchaseDate}</div></div>
-        <div class="data-item"><div class="data-label">รุ่นสินค้า:</div><div class="data-value">${reviewCache.productModel}</div></div>
-        <div class="data-item"><div class="data-label">Serial Number:</div><div class="data-value">${reviewCache.serialNumber}</div></div>
-        <div class="data-item"><div class="data-label">จำนวนรูปถ่าย:</div><div class="data-value">${reviewCache.photoCount} รูป</div></div>
-        <div class="data-item"><div class="data-label">ตัวแทนจำหน่าย:</div><div class="data-value">${reviewCache.dealer}</div></div>
-      `;
-      document.getElementById('reviewData').innerHTML = reviewHtml;
-      document.getElementById('confirmModal').style.display = 'block';
-    });
-
-    function closeModal(){ document.getElementById('confirmModal').style.display = 'none'; }
-
-    async function confirmSubmit(){
-      const btn = document.querySelector('.btn-confirm');
-      const orig = btn.innerHTML; btn.innerHTML = '<span class="loading"></span> กำลังส่งข้อมูล...'; btn.disabled = true;
-      try{
-        // IMPORTANT: Send as multipart/form-data with FormData + binary files
-        // Do NOT set Content-Type header manually; browser will set the boundary.
-        const fd = new FormData();
-        // Append text fields
-        fd.append('fullName', reviewCache.fullName);
-        fd.append('phone', reviewCache.phone);
-        fd.append('purchaseDate', reviewCache.purchaseDate);
-        fd.append('productModel', reviewCache.productModel);
-        fd.append('serialNumber', reviewCache.serialNumber);
-        fd.append('dealer', reviewCache.dealer);
-        fd.append('submittedAt', reviewCache.submittedAt);
-        fd.append('photoCount', String(reviewCache.photoCount));
-
-        // Append files (same field name for multiple files)
-        const serialSafe = (reviewCache.serialNumber || 'SN').replace(/[^a-zA-Z0-9_-]+/g, '-');
-        selectedFiles.forEach((file, i)=>{
-          const ext = (file.name.split('.').pop() || '').toLowerCase();
-          const niceName = `${serialSafe}_${Date.now()}_${i}.${ext || 'jpg'}`;
-          fd.append('serialPhotos', file, niceName);
-        });
-
-        const res = await fetch(CONFIG.WEBHOOK_URL, { method:'POST', body: fd });
-        if(!res.ok) throw new Error('Failed to send data');
-
-        document.getElementById('confirmModal').style.display = 'none';
-        document.getElementById('successModal').style.display = 'block';
-      }catch(err){
-        console.error(err);
-        alert('เกิดข้อผิดพลาดในการส่งข้อมูล กรุณาลองใหม่อีกครั้ง\n\nโปรดตรวจสอบ WEBHOOK_URL ใน CONFIG');
-        btn.innerHTML = orig; btn.disabled = false;
-      }
-    }
-
-    // Close modals on backdrop click
-    window.addEventListener('click', (e)=>{
-      const confirmModal = document.getElementById('confirmModal');
-      const successModal = document.getElementById('successModal');
-      if(e.target === confirmModal) closeModal();
-      if(e.target === successModal) successModal.style.display = 'none';
-    });
-  </script>
 </body>
 </html>
