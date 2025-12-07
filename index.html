@@ -3,23 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>The ICON Journey TEST</title>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=Prompt:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <title>The ICON Journey</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=Prompt:wght@300;400;600;700;900&display=swap" rel="stylesheet">
     
     <style>
         :root {
-            --primary-color: #d5a745;
+            --primary-color: #d5a745; /* สีทอง */
             --primary-hover: #b58b30;
-            --text-header: #653924;
+            --text-header: #653924;   /* สีน้ำตาลเข้ม */
             --text-main: #4a4a4a;
-            --bg-gradient-start: #ffffff;
-            --bg-gradient-end: #fdf5e6;
-            
             --card-bg: #ffffff;
             --border-color: #e0e0e0;
             --input-bg: #f9f9f9;
-            --radius: 16px;
-            --shadow: 0 15px 40px rgba(101, 57, 36, 0.1);
+            --radius: 20px;
+            --shadow: 0 15px 40px rgba(101, 57, 36, 0.2);
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -28,92 +25,159 @@
 
         body {
             font-family: 'Prompt', sans-serif;
-            background: linear-gradient(135deg, var(--bg-gradient-start) 0%, var(--bg-gradient-end) 100%);
+            /* พื้นหลังตาม Link ที่ให้มา */
+            background-image: url('https://raw.githubusercontent.com/P2scalWang/Image22amz/main/BGJour.jpg');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            background-repeat: no-repeat;
             color: var(--text-main);
             line-height: 1.6;
             min-height: 100vh;
-            padding: 40px 20px;
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
-        .container { max-width: 800px; margin: 0 auto; }
+        .container { 
+            width: 100%;
+            max-width: 800px; 
+            margin: 0 auto; 
+        }
 
-        /* Header */
-        header { text-align: center; margin-bottom: 40px; }
+        /* --- Landing Page Styles (หน้าแรก) --- */
+        .landing-container {
+            text-align: center;
+            padding: 20px;
+            animation: fadeIn 1s ease;
+            /* padding-top: 40px;  <-- ปรับลดลงเพราะมีโลโก้แล้ว */
+        }
 
-        .logo {
-            width: 280px; 
-            max-width: 100%;
-            height: auto; 
-            margin-bottom: 25px; 
+        /* เพิ่มสไตล์สำหรับโลโก้หน้าแรกกลับเข้ามา */
+        .landing-logo {
+            width: 1000px;
+            max-width: 60%;
+            height: auto;
+            margin: 0 auto 20px auto;
             display: block;
-            margin-left: auto;
-            margin-right: auto;
-            filter: drop-shadow(0 4px 6px rgba(0,0,0,0.1));
-        }
-        
-        h1 {
-            font-family: 'Playfair Display', serif;
-            font-size: 3.5rem;
-            color: var(--primary-color);
-            margin-bottom: 10px;
-            font-weight: 900;
-            letter-spacing: 1px;
-            text-shadow: 2px 2px 0px rgba(255, 255, 255, 1);
-        }
-        
-        .subtitle { 
-            color: var(--text-header); 
-            font-size: 1.2rem; 
-            font-weight: 500;
-            opacity: 0.9;
+            filter: drop-shadow(0 4px 4px rgba(0,0,0,0.2));
         }
 
-        /* Form Container */
+        /* หัวข้อ "Welcome to..." */
+        .landing-title {
+            font-family: 'Prompt', sans-serif;
+            font-weight: 900;
+            font-size: 3.5rem;
+            line-height: 1.2;
+            color: #E8B95E; /* สีทองสว่าง */
+            margin-bottom: 20px;
+            text-shadow: 
+                2px 2px 0px #653924, 
+                -1px -1px 0 #653924,  
+                1px -1px 0 #653924,
+                -1px 1px 0 #653924,
+                1px 1px 0 #653924;
+        }
+
+        /* Subtitle "ค้นพบพลัง..." */
+        .landing-subtitle {
+            font-family: 'Prompt', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #E8B95E;
+            margin-bottom: 50px;
+            text-shadow: 
+                1.5px 1.5px 0px #653924, 
+                -0.5px -0.5px 0 #653924;
+        }
+
+        /* --- กล่องข้อความ (ไม่มีกรอบขาว) --- */
+        .landing-quote-box {
+            /* background: rgba(255, 255, 255, 0.6); */
+            /* backdrop-filter: blur(2px); */
+            /* border-radius: 20px; */
+            padding: 20px;
+            margin-bottom: 40px;
+            /* box-shadow: 0 4px 15px rgba(0,0,0,0.05); */
+        }
+
+        .landing-quote-text {
+            font-family: 'Prompt', sans-serif;
+            font-size: 1.2rem;
+            color: #5a3a29; /* สีน้ำตาลเข้ม */
+            line-height: 1.8;
+            font-weight: 600;
+            text-shadow: 1px 1px 0 rgba(255,255,255,0.5); 
+        }
+        /* -------------------------------- */
+
+        /* ปุ่มเริ่ม */
+        .btn-start-landing {
+            background: linear-gradient(180deg, #d5a745 0%, #b8862d 100%);
+            color: white;
+            font-family: 'Prompt', sans-serif;
+            font-size: 1.6rem;
+            font-weight: 700;
+            padding: 18px 60px;
+            border: 3px solid white;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 0 5px 15px rgba(101, 57, 36, 0.4);
+            transition: transform 0.2s, box-shadow 0.2s;
+            text-shadow: 1px 1px 0 rgba(0,0,0,0.2);
+        }
+
+        .btn-start-landing:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 20px rgba(101, 57, 36, 0.5);
+        }
+
+        /* --- Form Styles (หน้ากรอกข้อมูล & คำถาม) --- */
         form {
             background-color: var(--card-bg);
-            padding: 50px;
+            padding: 40px;
             border-radius: var(--radius);
             box-shadow: var(--shadow);
-            border: 1px solid rgba(213, 167, 69, 0.2);
+            border: 1px solid rgba(213, 167, 69, 0.3);
             position: relative;
             overflow: hidden;
+            display: none; /* ซ่อนฟอร์มไว้ก่อนในหน้าแรก */
         }
 
-        /* Steps Animation */
-        .form-step {
-            display: none;
-            opacity: 0;
-            transition: opacity 0.5s ease-in-out, transform 0.5s ease;
-        }
-        .form-step.active { 
-            display: block; 
-            animation: fadeIn 0.8s forwards;
-        }
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
+        form.show { display: block; animation: slideUp 0.8s ease; }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(50px); }
             to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Logo ในหน้า Form (ขนาดปกติ) */
+        .form-logo {
+            width: 120px;
+            display: block;
+            margin: 0 auto 20px auto;
         }
 
         .section-title {
             font-family: 'Playfair Display', serif;
             font-size: 1.8rem;
             color: var(--text-header);
-            margin-bottom: 30px;
-            padding-bottom: 15px;
+            margin-bottom: 20px;
             border-bottom: 3px solid var(--primary-color);
             display: inline-block;
             font-weight: 700;
         }
 
-        /* Inputs */
-        .form-group { margin-bottom: 25px; }
+        /* Input Styles */
+        .form-group { margin-bottom: 20px; }
         label { display: block; margin-bottom: 8px; font-weight: 600; color: var(--text-header); }
         
         input[type="text"], input[type="number"], textarea {
             width: 100%; padding: 15px; 
             background-color: var(--input-bg);
             border: 1px solid var(--border-color); 
-            border-radius: 8px;
+            border-radius: 12px;
             color: var(--text-header); 
             font-family: 'Prompt', sans-serif;
             font-size: 1rem; 
@@ -124,198 +188,128 @@
             outline: none; 
             border-color: var(--primary-color);
             background-color: #fff;
-            box-shadow: 0 4px 15px rgba(213, 167, 69, 0.15);
+            box-shadow: 0 0 0 4px rgba(213, 167, 69, 0.1);
         }
         textarea { resize: vertical; min-height: 100px; }
 
-        /* Quiz Styling */
-        .quiz-group { margin-bottom: 40px; }
-        .question { 
-            font-size: 1.2rem; 
-            font-weight: 600; 
-            margin-bottom: 20px; 
-            color: var(--text-header);
-        }
-        
-        .options-grid { display: grid; gap: 12px; }
+        /* Quiz Styles */
+        .quiz-group { margin-bottom: 30px; }
+        .question { font-size: 1.1rem; font-weight: 600; margin-bottom: 15px; color: var(--text-header); }
+        .options-grid { display: grid; gap: 10px; }
         
         .radio-label {
-            display: flex; align-items: center; padding: 15px 20px;
-            background-color: #fff; 
-            border: 1px solid var(--border-color);
-            border-radius: 12px; 
-            cursor: pointer; 
-            transition: all 0.2s ease;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.03);
+            display: flex; align-items: center; padding: 12px 15px;
+            background-color: #fff; border: 1px solid var(--border-color);
+            border-radius: 10px; cursor: pointer; transition: all 0.2s;
         }
-        
-        .radio-label:hover { 
-            background-color: #fffcf5; 
-            border-color: var(--primary-color); 
-            transform: translateY(-2px);
-        }
-        
+        .radio-label:hover { border-color: var(--primary-color); background-color: #fffcf5; }
         input[type="radio"] { display: none; }
-        
         .radio-indicator {
-            width: 22px; height: 22px; 
-            border: 2px solid #ccc;
+            width: 20px; height: 20px; border: 2px solid #ccc;
             border-radius: 50%; margin-right: 15px; flex-shrink: 0;
             display: flex; align-items: center; justify-content: center;
         }
-        
         .radio-indicator::after {
-            content: ''; width: 12px; height: 12px; 
-            background-color: var(--primary-color);
+            content: ''; width: 10px; height: 10px; background-color: var(--primary-color);
             border-radius: 50%; opacity: 0; transform: scale(0); transition: all 0.2s;
         }
-        
-        input[type="radio"]:checked + .radio-label { 
-            background-color: #fffcf0; 
-            border-color: var(--primary-color); 
-            box-shadow: 0 4px 12px rgba(213, 167, 69, 0.2);
-        }
+        input[type="radio"]:checked + .radio-label { background-color: #fffcf0; border-color: var(--primary-color); }
         input[type="radio"]:checked + .radio-label .radio-indicator { border-color: var(--primary-color); }
         input[type="radio"]:checked + .radio-label .radio-indicator::after { opacity: 1; transform: scale(1); }
         input[type="radio"]:checked + .radio-label .text-content { color: var(--text-header); font-weight: 600; }
 
-        /* Buttons */
-        .btn-group { margin-top: 40px; display: flex; gap: 15px; }
-
-        .btn-next, .btn-submit, .btn-back {
-            flex: 1; padding: 16px;
-            font-family: 'Prompt', sans-serif; font-size: 1.1rem; font-weight: 600;
+        /* Navigation Buttons */
+        .btn-group { margin-top: 30px; display: flex; gap: 10px; }
+        .btn-nav {
+            flex: 1; padding: 15px;
+            font-family: 'Prompt', sans-serif; font-size: 1rem; font-weight: 700;
             border: none; border-radius: 50px; cursor: pointer;
-            transition: transform 0.2s, box-shadow 0.2s;
-            text-transform: uppercase; letter-spacing: 0.5px;
+            text-transform: uppercase;
         }
+        .btn-primary {
+            background: var(--primary-color); color: white;
+            box-shadow: 0 5px 15px rgba(213, 167, 69, 0.3);
+        }
+        .btn-primary:hover { background: var(--primary-hover); transform: translateY(-2px); }
+        .btn-secondary { background: transparent; border: 1px solid #ccc; color: #888; }
+        .btn-secondary:hover { border-color: var(--text-header); color: var(--text-header); }
 
-        .btn-next, .btn-submit {
-            background: var(--primary-color);
-            color: #fff;
-            box-shadow: 0 8px 20px rgba(213, 167, 69, 0.4);
-        }
-        
-        .btn-back {
-            background: transparent;
-            border: 2px solid #ddd;
-            color: #888;
-            max-width: 150px;
-        }
+        /* Steps Logic */
+        .form-step { display: none; }
+        .form-step.active { display: block; animation: fadeIn 0.5s; }
 
-        .btn-next:hover, .btn-submit:hover {
-            background-color: var(--primary-hover);
-            transform: translateY(-2px);
-            box-shadow: 0 12px 25px rgba(213, 167, 69, 0.5);
-        }
-        
-        .btn-back:hover {
-            border-color: var(--text-header);
-            color: var(--text-header);
-        }
-
-        /* Modal Result Styling */
+        /* Modal Styles */
         .modal {
             display: none; position: fixed; z-index: 9999; left: 0; top: 0;
             width: 100%; height: 100%; overflow: auto;
-            background-color: rgba(101, 57, 36, 0.6);
+            background-color: rgba(101, 57, 36, 0.8);
             backdrop-filter: blur(5px);
-            align-items: center; justify-content: center; opacity: 0; transition: opacity 0.3s ease;
-            padding: 20px;
+            align-items: center; justify-content: center; padding: 20px;
         }
         .modal.show { display: flex; opacity: 1; }
-        
         .modal-content {
-            background: #ffffff;
-            margin: auto; padding: 30px; 
-            border: 2px solid var(--primary-color);
-            width: 100%; max-width: 600px; border-radius: 20px; 
-            position: relative; 
-            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
-            transform: scale(0.8); transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            max-height: 90vh;
-            overflow-y: auto;
-            text-align: left;
+            background: #fff; padding: 30px; width: 100%; max-width: 600px;
+            border-radius: 20px; position: relative; border: 2px solid var(--primary-color);
+            max-height: 90vh; overflow-y: auto; text-align: left;
         }
-        .modal.show .modal-content { transform: scale(1); }
-        
-        .modal-content::-webkit-scrollbar { width: 8px; }
-        .modal-content::-webkit-scrollbar-track { background: #f1f1f1; border-radius: 10px; }
-        .modal-content::-webkit-scrollbar-thumb { background: #d5a745; border-radius: 10px; }
-
-        .close-btn {
-            color: #999; float: right; font-size: 28px;
-            font-weight: bold; position: sticky; top: 0; right: 0; cursor: pointer; z-index: 10;
-        }
-        .close-btn:hover { color: var(--primary-color); }
-        
+        .close-btn { position: absolute; top: 15px; right: 20px; font-size: 28px; cursor: pointer; color: #999; }
         .modal-header { text-align: center; margin-bottom: 20px; }
-        .result-emoji { font-size: 4rem; display: block; animation: bounce 2s infinite; margin-bottom: 10px; }
+        .result-title { font-family: 'Playfair Display', serif; font-size: 2rem; color: var(--primary-color); font-weight: 900; }
+        .result-traits { font-size: 1.1rem; font-weight: 600; color: var(--text-header); }
+        .result-emoji { font-size: 4rem; display: block; margin-bottom: 10px; animation: bounce 2s infinite; }
         @keyframes bounce { 0%, 20%, 50%, 80%, 100% {transform: translateY(0);} 40% {transform: translateY(-20px);} 60% {transform: translateY(-10px);} }
         
-        .result-title { 
-            font-family: 'Playfair Display', serif; 
-            font-size: 2rem; 
-            color: var(--primary-color); 
-            font-weight: 700;
-            line-height: 1.2;
-        }
-        
-        .result-traits { 
-            font-size: 1.1rem; 
-            font-weight: 600; 
-            color: var(--text-header); 
-            margin-top: 5px;
-        }
-
-        /* Result Content Styling */
-        .res-topic {
-            color: var(--primary-color);
-            font-size: 1.1rem;
-            font-weight: 700;
-            margin-top: 20px;
-            margin-bottom: 8px;
-            border-left: 4px solid var(--primary-color);
-            padding-left: 10px;
-        }
-        
-        .res-text { font-size: 0.95rem; color: #555; line-height: 1.6; margin-bottom: 10px; }
-        .res-keyword { background: #fffcf5; padding: 5px 10px; border-radius: 6px; color: var(--text-header); font-weight: 500; display: inline-block; margin-bottom: 15px; border: 1px solid #eee; }
-
-        /* Trick Box */
-        .trick-box {
-            background: linear-gradient(135deg, #fffcf0 0%, #fff 100%);
-            border: 1px dashed var(--primary-color);
-            border-radius: 12px;
-            padding: 20px;
-            margin-top: 25px;
-        }
-        .trick-header { color: var(--text-header); font-weight: 700; margin-bottom: 10px; display: flex; align-items: center; }
-        .trick-list { padding-left: 20px; margin: 0; }
-        .trick-list li { margin-bottom: 8px; color: #555; font-size: 0.95rem; }
-
-        .capture-hint { font-size: 0.8rem; color: #888; margin-top: 20px; text-align: center; display: block;}
+        /* Result Detail Styles */
+        .res-topic { color: var(--primary-color); font-weight: 700; margin-top: 15px; border-left: 3px solid var(--primary-color); padding-left: 10px; }
+        .res-text { font-size: 0.95rem; color: #555; margin-bottom: 10px; }
+        .res-keyword { background: #fffcf5; padding: 5px 10px; border-radius: 5px; font-weight: 600; color: var(--text-header); display: inline-block; margin-bottom: 15px; border: 1px solid #eee; }
+        .trick-box { background: #fffcf0; border: 1px dashed var(--primary-color); border-radius: 10px; padding: 15px; margin-top: 20px; }
+        .trick-header { color: var(--text-header); font-weight: 700; margin-bottom: 10px; }
+        .trick-list { padding-left: 20px; margin: 0; font-size: 0.9rem; color: #555; }
+        .capture-hint { font-size: 0.8rem; color: #aaa; text-align: center; margin-top: 20px; }
 
         @media (max-width: 600px) {
-            h1 { font-size: 2.2rem; }
+            .landing-container { padding-top: 20px; }
+            .landing-title { font-size: 2.5rem; }
+            .landing-subtitle { font-size: 1.2rem; }
+            .btn-start-landing { width: 100%; font-size: 1.4rem; }
             form { padding: 25px; }
             .btn-group { flex-direction: column-reverse; }
-            .btn-back { max-width: 100%; }
-            .modal-content { padding: 20px; }
         }
     </style>
 </head>
 <body>
 
     <div class="container">
-        <header>
-            <img src="https://raw.githubusercontent.com/P2scalWang/Image22amz/main/queen.png" alt="Queen Double Ent Logo" class="logo">
-            <h1>The ICON Journey</h1>
-            <p class="subtitle">ค้นหาตัวตนของคุณ เพื่อเส้นทางการไลฟ์ที่ใช่</p>
-        </header>
+        
+        <div id="landingPage" class="landing-container">
+            
+            <img src="https://raw.githubusercontent.com/P2scalWang/Image22amz/main/queen.png" alt="Logo" class="landing-logo">
+
+            <div class="landing-title">
+                "Welcome to<br>The ICON Journey"
+            </div>
+            
+            <div class="landing-subtitle">
+                👑ค้นพบพลังในแบบของคุณกับวังมงกุฎทอง👑
+            </div>
+
+            <div class="landing-quote-box">
+                <div class="landing-quote-text">
+                    “The ICON Journey ถูกสร้างขึ้นเพื่อให้ทุกก้าวของคุณ<br>
+                    เต็มไปด้วยการดูแล ความอบอุ่น และการเติบโตอย่างแท้จริง<br>
+                    ทุกคนมีแสงของตัวเอง ที่นี่...เราจะช่วยให้คุณเห็นมันชัดขึ้น<br>
+                    และเปล่งประกายในวังมงกุฎทองอย่างงดงามที่สุด 👑✨”
+                </div>
+            </div>
+
+            <button class="btn-start-landing" onclick="startJourney()">เริ่มทำแบบสอบถาม</button>
+        </div>
 
         <form id="quizForm">
+            
             <div id="step1" class="form-step active">
+                <img src="https://raw.githubusercontent.com/P2scalWang/Image22amz/main/queen.png" alt="Logo" class="form-logo">
                 <h2 class="section-title">01. ข้อมูลส่วนตัว</h2>
                 
                 <div class="form-group">
@@ -356,13 +350,15 @@
                 </div>
 
                 <div class="btn-group">
-                    <button type="button" class="btn-next" onclick="goToStep(2)">ถัดไป (NEXT)</button>
+                    <button type="button" class="btn-nav btn-secondary" onclick="backToLanding()">ย้อนกลับ</button>
+                    <button type="button" class="btn-nav btn-primary" onclick="goToStep(2)">ถัดไป (NEXT)</button>
                 </div>
             </div>
 
             <div id="step2" class="form-step">
-                <h2 class="section-title">02. ค้นหาตัวตน (Attitude Test)</h2>
-                <p style="color:#777; margin-bottom: 30px;">เลือกคำตอบที่ตรงกับความเป็นคุณมากที่สุด</p>
+                 <img src="https://raw.githubusercontent.com/P2scalWang/Image22amz/main/queen.png" alt="Logo" class="form-logo">
+                <h2 class="section-title">02. ค้นหาตัวตน</h2>
+                <p style="color:#777; margin-bottom: 20px;">เลือกคำตอบที่ตรงกับความเป็นคุณมากที่สุด</p>
 
                 <div class="quiz-group">
                     <p class="question">1. อะไรผลักดันให้คุณอยากไลฟ์มากที่สุด ? <span style="color:red">*</span></p>
@@ -475,8 +471,8 @@
                 </div>
 
                 <div class="btn-group">
-                    <button type="button" class="btn-back" onclick="goToStep(1)">ย้อนกลับ</button>
-                    <button type="submit" id="submitBtn" class="btn-submit">ดูผลลัพธ์ของคุณ</button>
+                    <button type="button" class="btn-nav btn-secondary" onclick="goToStep(1)">ย้อนกลับ</button>
+                    <button type="submit" id="submitBtn" class="btn-nav btn-primary">ดูผลลัพธ์</button>
                 </div>
             </div>
         </form>
@@ -496,45 +492,60 @@
     </div>
 
     <script>
-        // ใส่ URL ที่คุณให้มา
         const WEBHOOK_URL = "https://script.google.com/macros/s/AKfycbyIPUlb5CFyplfAfhWWogrBMzcib62rb3D7QUFnKOoR-IKXdHcJRiU4ajAwRWm8LcfD/exec"; 
 
-        function goToStep(stepNumber) {
-            const step1 = document.getElementById('step1');
-            const step2 = document.getElementById('step2');
+        // ฟังก์ชันเริ่มจากหน้า Landing
+        function startJourney() {
+            document.getElementById('landingPage').style.display = 'none';
+            document.getElementById('quizForm').classList.add('show');
+            // เริ่มที่ Step 1
+            document.querySelectorAll('.form-step').forEach(el => el.classList.remove('active'));
+            document.getElementById('step1').classList.add('active');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
 
-            if (stepNumber === 2) {
-                const inputs = step1.querySelectorAll('input[required]');
+        // ย้อนกลับไปหน้า Landing
+        function backToLanding() {
+            document.getElementById('quizForm').classList.remove('show');
+            // รอ Animation นิดนึงแล้วซ่อน
+            setTimeout(() => {
+                document.getElementById('quizForm').style.display = 'none';
+                document.getElementById('landingPage').style.display = 'block';
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }, 300);
+        }
+
+        function goToStep(stepNumber) {
+            const currentStepDiv = document.querySelector('.form-step.active');
+            
+            // Check validation if moving forward
+            if (stepNumber > 1) { 
+                const inputs = currentStepDiv.querySelectorAll('input[required]');
                 let isValid = true;
                 inputs.forEach(input => {
-                    if (!input.value.trim()) {
-                        isValid = false;
-                        input.style.borderColor = 'red';
+                    if (input.type === 'radio') {
+                        // Radio logic handled in submit
                     } else {
-                        input.style.borderColor = '#e0e0e0';
+                        if (!input.value.trim()) {
+                            isValid = false;
+                            input.style.borderColor = 'red';
+                        } else {
+                            input.style.borderColor = '#e0e0e0';
+                        }
                     }
                 });
 
                 if (!isValid) {
-                    alert('กรุณากรอกข้อมูลสำคัญ (ที่มีเครื่องหมาย *) ให้ครบถ้วน');
+                    alert('กรุณากรอกข้อมูลให้ครบถ้วน');
                     return;
                 }
-
-                step1.classList.remove('active');
-                setTimeout(() => {
-                    step2.classList.add('active');
-                    // Smooth scroll to top of form
-                    window.scrollTo({ top: 0, behavior: 'smooth' });
-                }, 100);
-            } 
-            else if (stepNumber === 1) {
-                step2.classList.remove('active');
-                setTimeout(() => {
-                    step1.classList.add('active');
-                    // Smooth scroll to top of form
-                    window.scrollTo({ top: 0, behavior: 'smooth' });
-                }, 100);
             }
+
+            document.querySelectorAll('.form-step').forEach(el => el.classList.remove('active'));
+            setTimeout(() => {
+                document.getElementById('step' + stepNumber).classList.add('active');
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }, 100);
         }
 
         document.addEventListener('DOMContentLoaded', function() {
@@ -543,143 +554,64 @@
             const closeBtn = document.querySelector('.close-btn');
             const submitBtn = document.getElementById('submitBtn');
 
-            // ผลลัพธ์พร้อมเนื้อหาใหม่
+            // Result Content Data
             const resultsData = {
                 F: {
                     title: "ICON of Fun (F)",
                     emoji: "🎉",
                     traits: "ร่าเริง สนุก | Variety, Game, Entertain",
-                    desc: `
-                        <div class="res-keyword">คีย์เวิร์ด: ร่าเริง สนุก สนุกก่อนค่อยคิดทีหลัง / Energy คนมองแล้วยิ้ม</div>
-                        <div class="res-topic">ตัวตนด้านใน</div>
-                        <div class="res-text">เป็นคนอารมณ์ดี หัวเราะง่าย ชอบสร้างบรรยากาศให้คนรอบตัวมีความสุข เวลามีคนอยู่รอบตัวจะยิ่งมีพลัง เหมือนแบตชาร์จจากเสียงหัวเราะและคอมเมนต์ ไม่ชอบความตึงเครียดหรือบรรยากาศเครียด ๆ นาน ๆ เป็นพวก “พร้อมเล่นตลอดเวลา” ชอบเกม ชอบชาเลนจ์ ชอบอะไรที่ไม่จำเจ</div>
-                        <div class="res-topic">ฟีลเวลาไลฟ์</div>
-                        <div class="res-text">ไลฟ์เต็มไปด้วยเสียงหัวเราะ เล่นมุก พูดคุยแบบเพื่อน ชอบเล่นเกมกับคนดู, Spin Wheel, ทายคำ, เกมตอบคำถาม, โหวต เหมาะกับไลฟ์ที่มี Interaction สูง เช่น Variety, เกม, Challenge, Reaction ฮา ๆ</div>
-                        <div class="res-topic">จุดแข็ง</div>
-                        <div class="res-text">คนดูจะรู้สึกว่า “อยากกลับมาอีก” เพราะสนุก สร้างคอมมูนิตี้ได้ง่าย คนดูจะรู้สึกเป็นเพื่อน เป็นตัวดึงบรรยากาศห้องให้ไม่เงียบ</div>
-                        <div class="res-topic">สิ่งที่ต้องระวัง</div>
-                        <div class="res-text">เล่นเพลินจนลืมโฟกัสเป้าหมาย (ยอด / สคริปต์หลักของไลฟ์) บางทีสนุกเกินไปจนขาดโครงสร้าง ต้องระวังมุกที่อาจไปแตะเส้นกฎแพลตฟอร์ม</div>
-                        <div class="trick-box">
-                            <div class="trick-header">✔ ทริคของครีเอเตอร์สาย Fun ให้ได้ของขวัญมากขึ้น</div>
-                            <ul class="trick-list">
-                                <li>ทำ Challenge ที่มีผลลัพธ์ชัดเจนเมื่อได้รับ Gift เช่น “ได้ดอกไม้ 1 อัน = เปิดสุ่ม 1 ครั้ง” หรือ “ครบ 5 ดอก = ทำท่าฮา ๆ / เปิดไข่สุ่ม”</li>
-                                <li>สร้างเกมให้คนดูมีส่วนร่วม เช่น Spin wheel หรือ ทายคำ ถ้าทายไม่ได้ผู้จัดต้องโดนลงโทษ</li>
-                                <li>ใช้เสียง Reaction ตลก ๆ ตอนรับของขวัญ → เพิ่ม dopamine ให้คนดู</li>
-                                <li>พูดขอบคุณแบบสดใส เช่น “ขอบคุณค้าบบบบ ใครให้คือหล่อมากกกวันนี้!”</li>
-                                <li>ให้คนดูรู้สึกว่า ของขวัญคือส่วนหนึ่งของเกม</li>
-                            </ul>
-                        </div>
-                    `
+                    desc: `` // Placeholder
                 },
                 G: {
                     title: "ICON of Glow (G)",
                     emoji: "✨",
                     traits: "มั่นใจ เปล่งประกาย | Beauty, Lifestyle, Self-love",
-                    desc: `
-                        <div class="res-keyword">คีย์เวิร์ด: มั่นใจ เปล่งประกาย มีเสน่ห์แบบ “ฉันรักตัวเองและดูแลตัวเอง”</div>
-                        <div class="res-topic">ตัวตนด้านใน</div>
-                        <div class="res-text">เป็นคนที่ใส่ใจภาพลักษณ์ แต่ไม่ใช่แค่สวยภายนอก แต่อยากให้ตัวเอง “ดูดีจากข้างใน” เชื่อในพลังของการพัฒนาตัวเอง ทั้งเรื่องบุคลิก ทัศนคติ ไลฟ์สไตล์ ชอบแชร์สิ่งที่ตัวเองลองแล้ว เช่น สกินแคร์, เมคอัพ, แฟชั่น, กาแฟที่ชอบ, คาเฟ่โปรด มีความมั่นใจในตัวเองระดับหนึ่ง และอยากส่งต่อความมั่นใจนั้นให้คนอื่นด้วย</div>
-                        <div class="res-topic">ฟีลเวลาไลฟ์</div>
-                        <div class="res-text">บรรยากาศเหมือนมานั่งคุยกับเพื่อนสวย ๆ ที่เราอยากเป็นแบบเขา เล่าไลฟ์สไตล์, Get ready with me, แต่งหน้า, แต่งตัว, จัดมุมห้อง, รีวิวของที่ใช้จริง พูดเรื่อง Self-love, การดูแลตัวเอง, การตั้งมาตรฐานชีวิต</div>
-                        <div class="res-topic">จุดแข็ง</div>
-                        <div class="res-text">ดึงดูดคนที่ “อยากพัฒนาตัวเอง” ได้ดีมาก เหมาะกับงาน Beauty, Lifestyle, รีวิวสินค้า, แบรนด์คอลแลป เป็นแรงบันดาลใจให้คนดูอยากลุกขึ้นมาดูแลตัวเอง</div>
-                        <div class="res-topic">สิ่งที่ต้องระวัง</div>
-                        <div class="res-text">ถ้าเน้นภาพลักษณ์มากเกินไป อาจทำให้บางคนรู้สึก “ไกลตัว” ต้องบาลานซ์ความสวยกับความเป็นคนธรรมดา ให้ยังรู้สึกเข้าถึงได้</div>
-                        <div class="trick-box">
-                            <div class="trick-header">✔ ทริคครีเอเตอร์สาย Glow ให้ได้ของขวัญมากขึ้น</div>
-                            <ul class="trick-list">
-                                <li>ทำ Glow Goals: “ครบ 10 ดอก = เปลี่ยนลุคแต่งหน้า live”</li>
-                                <li>ใช้บุคลิกมั่นใจแต่สุภาพให้เป็นประโยชน์ เช่น “วันนี้กำลังใจน้อยหน่อย ขอ 1 ดอกเรียกพลังค่ะ ✨”</li>
-                                <li>ทำมุมกล้อง แสง ให้สวย → ความ aesthetic กระตุ้นของขวัญ</li>
-                                <li>แชร์ Self-love moment เช่น “ถ้าวันนี้ได้ 20 ดอก จะให้ดูไอเท็มลับที่ยังไม่เคยบอกใครค่ะ 💖”</li>
-                                <li>ใช้เสียงขอบคุณที่ฟังอบอุ่นและมั่นใจ เช่น “ขอบคุณนะคะ น่ารักที่สุดเลยค่ะคุณ ✨”</li>
-                            </ul>
-                        </div>
-                    `
+                    desc: `` // Placeholder
                 },
                 C: {
                     title: "ICON of Calm (C)",
                     emoji: "🌷",
                     traits: "ละมุน มีสติ | Healing, Soft Talk, Mindful",
-                    desc: `
-                        <div class="res-keyword">คีย์เวิร์ด: ละมุน มีสติ ฟังแล้วใจนุ่ม / เป็นพื้นที่ปลอดภัย</div>
-                        <div class="res-topic">ตัวตนด้านใน</div>
-                        <div class="res-text">เป็นคนฟังเก่ง รับฟังปัญหาคนอื่นได้ดี ไม่ชอบดราม่า ไม่ชอบการเผชิญหน้า ใช้ความนุ่มและสติแก้สิ่งต่าง ๆ มักจะเติบโตมาพร้อมการเยียวยาตัวเอง เลยเข้าใจความรู้สึกของคนที่เจ็บ / เหนื่อยง่าย คำพูดจะมีน้ำหนัก เพราะมาจากประสบการณ์+การทบทวนตัวเอง</div>
-                        <div class="res-topic">ฟีลเวลาไลฟ์</div>
-                        <div class="res-text">ไฟ/เสียง/บรรยากาศจะนุ่ม เหมือนเปิดไลฟ์แล้ว “ใจมันช้าลง” พูดเรื่อง Healing, ความคิด, ความรู้สึก, ชีวิต, การพักใจ ให้คำแนะนำ ให้กำลังใจ รับฟังเรื่องของคนดูแบบจริงใจ</div>
-                        <div class="res-topic">จุดแข็ง</div>
-                        <div class="res-text">สร้างความผูกพันลึกกับคนดูได้ดีมาก คนดูจะรู้สึกว่า ‘ไว้ใจได้’ เหมาะกับไลฟ์ปรึกษา, Soft talk, Mindfulness, Tarot แบบละมุน, เขียน journal, ASMR พูดเบา ๆ คนดูจะเปิดไลฟ์ไว้เป็น “ที่พิงใจ”</div>
-                        <div class="res-topic">สิ่งที่ต้องระวัง</div>
-                        <div class="res-text">พลังอาจแผ่วไปสำหรับคนที่ชอบความตื่นเต้น ถ้าเนื้อหา down เกินไปบ่อย ๆ อาจดึงอารมณ์ทั้งห้องให้หน่วง ต้องหาจังหวะโยนแสง “ความหวัง” แทรกไปเสมอ</div>
-                        <div class="trick-box">
-                            <div class="trick-header">✔ ทริคของครีเอเตอร์สาย Calm ให้ได้ของขวัญมากขึ้น</div>
-                            <ul class="trick-list">
-                                <li>ใช้คำขอบคุณนุ่ม ๆ เช่น “ขอบคุณสำหรับพลังงานดี ๆ นะคะ ดอกนี้ทำให้ใจอุ่นขึ้นเลยค่ะ 🌷”</li>
-                                <li>ทำ Healing Ritual: “ครบ 5 ดอกวันนี้ เราจะทำช่วง Affirmation พิเศษนะคะ”</li>
-                                <li>ให้คนดูรู้สึกว่า ของขวัญ = การเติมพลังให้ห้อง</li>
-                                <li>ทำกิจกรรม Soft แบบตอบแทน เช่น “ทุกดอกไม้ = ฉันจะอ่านข้อความกำลังใจให้คุณหนึ่งประโยค”</li>
-                                <li>คนดูของกลุ่ม Calm ชอบ atmosphere → จัดองค์ประกอบให้ละมุน</li>
-                            </ul>
-                        </div>
-                    `
+                    desc: `` // Placeholder
                 },
                 T: {
                     title: "ICON of Talk (T)",
                     emoji: "🎤",
                     traits: "สื่อสารดี มีเสน่ห์ | Talk Show, Storytelling, Advice",
-                    desc: `
-                        <div class="res-keyword">คีย์เวิร์ด: สื่อสารดี มีเสน่ห์ พูดเก่ง เล่าเรื่องสนุก</div>
-                        <div class="res-topic">ตัวตนด้านใน</div>
-                        <div class="res-text">คิดเร็ว พูดคล่อง เล่าเรื่องเป็น เหมือนคนที่เพื่อนอยากให้เล่าทุกเรื่อง ชอบแบ่งปันความรู้หรือประสบการณ์ของตัวเอง เวลาเล่าเรื่องจะวางโครงในหัวได้เองโดยไม่รู้ตัว สนุกกับการเห็นคนฟัง “อ๋อ” หรือ “ได้อะไรกลับไป”</div>
-                        <div class="res-topic">ฟีลเวลาไลฟ์</div>
-                        <div class="res-text">เหมือนดู Talk Show / พอดแคสต์แบบมีภาพ เล่าเรื่องชีวิต, เรื่องงาน, มุมมอง, ประสบการณ์, เคสจริง ดูดคนดูด้วยเรื่องเล่า, การตั้งคำถาม, การให้มุมมอง</div>
-                        <div class="res-topic">จุดแข็ง</div>
-                        <div class="res-text">เหมาะกับคอนเทนต์ให้ความรู้ / เล่าเคส / แบ่งปันประสบการณ์ ทำ Live Q&A ได้ดีมาก คนดูจะรู้สึกว่า “ได้ทั้งสาระและเพื่อนคุย”</div>
-                        <div class="res-topic">สิ่งที่ต้องระวัง</div>
-                        <div class="res-text">พูดเยอะจนกลายเป็นสอน/เทศน์เกินไป ถ้าไม่บาลานซ์โทนอารมณ์ ต้องระวังไม่ให้ข้อมูล overload – คนดูงง อาจต้องมี Visual/โน้ตหรือจุดจับ เพื่อให้คนตามทัน</div>
-                        <div class="trick-box">
-                            <div class="trick-header">✔ ทริคของครีเอเตอร์สาย Talk ให้ได้ของขวัญมากขึ้น</div>
-                            <ul class="trick-list">
-                                <li>ทำ “Story Unlock”: “ถ้าได้ 3 ดอก จะเล่าต่ออีกหนึ่งพาร์ทนะคะ”</li>
-                                <li>ทำ Mini Advice Session: “ครบ 5 ดอก = เปิดช่วงให้คำแนะนำส่วนตัว 1 คน”</li>
-                                <li>ใช้น้ำเสียงจริงใจและชัดเจน ใช้ประโยชน์จากการตั้งคำถาม เช่น “เรื่องนี้คุณคิดยังไง? ถ้าอยากให้เล่าต่อ ส่งดอกคุยกับเราได้นะคะ”</li>
-                                <li>คนกลุ่มนี้ได้ของขวัญจากความรู้สึกว่า “เขาให้คุณค่าเรา”</li>
-                            </ul>
-                        </div>
-                    `
+                    desc: `` // Placeholder
                 },
                 A: {
                     title: "ICON of Art (A)",
                     emoji: "🎨",
                     traits: "สร้างสรรค์ มีเอกลักษณ์ | Music, Drawing, DIY, Performance",
-                    desc: `
-                        <div class="res-keyword">คีย์เวิร์ด: สร้างสรรค์ มีเอกลักษณ์ “ฉันจะเล่าเรื่องผ่านงานของฉัน”</div>
-                        <div class="res-topic">ตัวตนด้านใน</div>
-                        <div class="res-text">ชอบสร้างสิ่งใหม่ ๆ ไม่ชอบอะไรที่เหมือนใคร มักคิดเป็นภาพ เสียง หรือ movement มากกว่าคำพูด ใช้ศิลปะ/การแสดง/ดนตรี/ไพ่/การเต้น เป็นภาษาของตัวเอง อาจจะเป็นคนเก็บตัวหน่อย แต่เวลาได้แสดงงานของตัวเองจะเปล่งประกายมาก</div>
-                        <div class="res-topic">ฟีลเวลาไลฟ์</div>
-                        <div class="res-text">เหมือน “นั่งดูศิลปินทำงานใกล้ ๆ” เล่นดนตรี, ร้องเพลง, เต้น, วาดรูป, วาด tarot aesthetic, ทำ DIY, ทำ craft มีความ unique สูง คนดูจะรู้สึกว่าไลฟ์นี้ไม่เหมือนห้องอื่น</div>
-                        <div class="res-topic">จุดแข็ง</div>
-                        <div class="res-text">แตกต่างชัดเจน สามารถสร้าง character ได้แรงมาก มีโอกาสต่อยอดไปทางคอนเทนต์ YouTube, Clip, Reels, Brand collab ถ้าจับ mood & tone ดี จะกลายเป็น “ห้องที่มาแล้วรู้สึกสวย/เท่/ขลัง”</div>
-                        <div class="res-topic">สิ่งที่ต้องระวัง</div>
-                        <div class="res-text">บางครั้งตั้งใจทำงานมากจนลืมพูด หรือ interact กับคนดู งานอาจเฉพาะทาง คนดูใหม่อาจต้องใช้เวลาทำความรู้จัก ต้องออกแบบวิธี “เล่าเรื่อง” ผ่านงาน เพื่อให้คนดูเข้าใจและรู้สึกอินไปด้วย</div>
-                        <div class="trick-box">
-                            <div class="trick-header">✔ ทริคของครีเอเตอร์สาย Art ให้ได้ของขวัญมากขึ้น</div>
-                            <ul class="trick-list">
-                                <li>ทำ “Art for Gift”: “ครบ 3 ดอก = วาดดอกไม้ 1 ดอกให้คุณนะคะ” หรือ “ครบ 10 ดอก = ร้องเพลงโปรดหนึ่งเพลง”</li>
-                                <li>ตั้ง Stage Mood ให้มีความ aesthetic → กระตุ้นให้คนอยากให้</li>
-                                <li>ใช้สีไฟ/บรรยากาศช่วยให้ไลฟ์มี Character</li>
-                                <li>หากเป็น Tarot → ทำเป็น Mystical Gift Ritual</li>
-                                <li>ทำกิจกรรม “เลือกสีดอกไม้แล้วฉันวาดให้”</li>
-                            </ul>
-                        </div>
-                    `
+                    desc: `` // Placeholder
                 }
             };
+
+            // Populate Result Data
+            resultsData.F.desc = `<div class="res-keyword">คีย์เวิร์ด: ร่าเริง สนุก สนุกก่อนค่อยคิดทีหลัง / Energy คนมองแล้วยิ้ม</div><div class="res-topic">ตัวตนด้านใน</div><div class="res-text">เป็นคนอารมณ์ดี หัวเราะง่าย ชอบสร้างบรรยากาศให้คนรอบตัวมีความสุข เวลามีคนอยู่รอบตัวจะยิ่งมีพลัง เหมือนแบตชาร์จจากเสียงหัวเราะและคอมเมนต์ ไม่ชอบความตึงเครียดหรือบรรยากาศเครียด ๆ นาน ๆ เป็นพวก “พร้อมเล่นตลอดเวลา” ชอบเกม ชอบชาเลนจ์ ชอบอะไรที่ไม่จำเจ</div><div class="res-topic">ฟีลเวลาไลฟ์</div><div class="res-text">ไลฟ์เต็มไปด้วยเสียงหัวเราะ เล่นมุก พูดคุยแบบเพื่อน ชอบเล่นเกมกับคนดู, Spin Wheel, ทายคำ, เกมตอบคำถาม, โหวต เหมาะกับไลฟ์ที่มี Interaction สูง เช่น Variety, เกม, Challenge, Reaction ฮา ๆ</div><div class="res-topic">จุดแข็ง</div><div class="res-text">คนดูจะรู้สึกว่า “อยากกลับมาอีก” เพราะสนุก สร้างคอมมูนิตี้ได้ง่าย คนดูจะรู้สึกเป็นเพื่อน เป็นตัวดึงบรรยากาศห้องให้ไม่เงียบ</div><div class="trick-box"><div class="trick-header">✔ ทริคของครีเอเตอร์สาย Fun ให้ได้ของขวัญมากขึ้น</div><ul class="trick-list"><li>ทำ Challenge ที่มีผลลัพธ์ชัดเจนเมื่อได้รับ Gift เช่น “ได้ดอกไม้ 1 อัน = เปิดสุ่ม 1 ครั้ง” หรือ “ครบ 5 ดอก = ทำท่าฮา ๆ / เปิดไข่สุ่ม”</li><li>สร้างเกมให้คนดูมีส่วนร่วม เช่น Spin wheel หรือ ทายคำ</li><li>ใช้เสียง Reaction ตลก ๆ ตอนรับของขวัญ → เพิ่ม dopamine ให้คนดู</li></ul></div>`;
+            resultsData.G.desc = `<div class="res-keyword">คีย์เวิร์ด: มั่นใจ เปล่งประกาย มีเสน่ห์แบบ “ฉันรักตัวเองและดูแลตัวเอง”</div><div class="res-topic">ตัวตนด้านใน</div><div class="res-text">เป็นคนที่ใส่ใจภาพลักษณ์ แต่ไม่ใช่แค่สวยภายนอก แต่อยากให้ตัวเอง “ดูดีจากข้างใน” เชื่อในพลังของการพัฒนาตัวเอง ทั้งเรื่องบุคลิก ทัศนคติ ไลฟ์สไตล์ ชอบแชร์สิ่งที่ตัวเองลองแล้ว เช่น สกินแคร์, เมคอัพ, แฟชั่น, กาแฟที่ชอบ, คาเฟ่โปรด มีความมั่นใจในตัวเองระดับหนึ่ง และอยากส่งต่อความมั่นใจนั้นให้คนอื่นด้วย</div><div class="res-topic">ฟีลเวลาไลฟ์</div><div class="res-text">บรรยากาศเหมือนมานั่งคุยกับเพื่อนสวย ๆ ที่เราอยากเป็นแบบเขา เล่าไลฟ์สไตล์, Get ready with me, แต่งหน้า, แต่งตัว, จัดมุมห้อง, รีวิวของที่ใช้จริง พูดเรื่อง Self-love, การดูแลตัวเอง, การตั้งมาตรฐานชีวิต</div><div class="res-topic">จุดแข็ง</div><div class="res-text">ดึงดูดคนที่ “อยากพัฒนาตัวเอง” ได้ดีมาก เหมาะกับงาน Beauty, Lifestyle, รีวิวสินค้า, แบรนด์คอลแลป เป็นแรงบันดาลใจให้คนดูอยากลุกขึ้นมาดูแลตัวเอง</div><div class="trick-box"><div class="trick-header">✔ ทริคครีเอเตอร์สาย Glow ให้ได้ของขวัญมากขึ้น</div><ul class="trick-list"><li>ทำ Glow Goals: “ครบ 10 ดอก = เปลี่ยนลุคแต่งหน้า live”</li><li>ใช้บุคลิกมั่นใจแต่สุภาพให้เป็นประโยชน์ เช่น “วันนี้กำลังใจน้อยหน่อย ขอ 1 ดอกเรียกพลังค่ะ ✨”</li><li>ทำมุมกล้อง แสง ให้สวย → ความ aesthetic กระตุ้นของขวัญ</li></ul></div>`;
+            resultsData.C.desc = `<div class="res-keyword">คีย์เวิร์ด: ละมุน มีสติ ฟังแล้วใจนุ่ม / เป็นพื้นที่ปลอดภัย</div><div class="res-topic">ตัวตนด้านใน</div><div class="res-text">เป็นคนฟังเก่ง รับฟังปัญหาคนอื่นได้ดี ไม่ชอบดราม่า ไม่ชอบการเผชิญหน้า ใช้ความนุ่มและสติแก้สิ่งต่าง ๆ มักจะเติบโตมาพร้อมการเยียวยาตัวเอง เลยเข้าใจความรู้สึกของคนที่เจ็บ / เหนื่อยง่าย คำพูดจะมีน้ำหนัก เพราะมาจากประสบการณ์+การทบทวนตัวเอง</div><div class="res-topic">ฟีลเวลาไลฟ์</div><div class="res-text">ไฟ/เสียง/บรรยากาศจะนุ่ม เหมือนเปิดไลฟ์แล้ว “ใจมันช้าลง” พูดเรื่อง Healing, ความคิด, ความรู้สึก, ชีวิต, การพักใจ ให้คำแนะนำ ให้กำลังใจ รับฟังเรื่องของคนดูแบบจริงใจ</div><div class="res-topic">จุดแข็ง</div><div class="res-text">สร้างความผูกพันลึกกับคนดูได้ดีมาก คนดูจะรู้สึกว่า ‘ไว้ใจได้’ เหมาะกับไลฟ์ปรึกษา, Soft talk, Mindfulness, Tarot แบบละมุน, เขียน journal, ASMR พูดเบา ๆ คนดูจะเปิดไลฟ์ไว้เป็น “ที่พิงใจ”</div><div class="trick-box"><div class="trick-header">✔ ทริคของครีเอเตอร์สาย Calm ให้ได้ของขวัญมากขึ้น</div><ul class="trick-list"><li>ใช้คำขอบคุณนุ่ม ๆ เช่น “ขอบคุณสำหรับพลังงานดี ๆ นะคะ ดอกนี้ทำให้ใจอุ่นขึ้นเลยค่ะ 🌷”</li><li>ทำ Healing Ritual: “ครบ 5 ดอกวันนี้ เราจะทำช่วง Affirmation พิเศษนะคะ”</li><li>คนดูของกลุ่ม Calm ชอบ atmosphere → จัดองค์ประกอบให้ละมุน</li></ul></div>`;
+            resultsData.T.desc = `<div class="res-keyword">คีย์เวิร์ด: สื่อสารดี มีเสน่ห์ พูดเก่ง เล่าเรื่องสนุก</div><div class="res-topic">ตัวตนด้านใน</div><div class="res-text">คิดเร็ว พูดคล่อง เล่าเรื่องเป็น เหมือนคนที่เพื่อนอยากให้เล่าทุกเรื่อง ชอบแบ่งปันความรู้หรือประสบการณ์ของตัวเอง เวลาเล่าเรื่องจะวางโครงในหัวได้เองโดยไม่รู้ตัว สนุกกับการเห็นคนฟัง “อ๋อ” หรือ “ได้อะไรกลับไป”</div><div class="res-topic">ฟีลเวลาไลฟ์</div><div class="res-text">เหมือนดู Talk Show / พอดแคสต์แบบมีภาพ เล่าเรื่องชีวิต, เรื่องงาน, มุมมอง, ประสบการณ์, เคสจริง ดูดคนดูด้วยเรื่องเล่า, การตั้งคำถาม, การให้มุมมอง</div><div class="res-topic">จุดแข็ง</div><div class="res-text">เหมาะกับคอนเทนต์ให้ความรู้ / เล่าเคส / แบ่งปันประสบการณ์ ทำ Live Q&A ได้ดีมาก คนดูจะรู้สึกว่า “ได้ทั้งสาระและเพื่อนคุย”</div><div class="trick-box"><div class="trick-header">✔ ทริคของครีเอเตอร์สาย Talk ให้ได้ของขวัญมากขึ้น</div><ul class="trick-list"><li>ทำ “Story Unlock”: “ถ้าได้ 3 ดอก จะเล่าต่ออีกหนึ่งพาร์ทนะคะ”</li><li>ทำ Mini Advice Session: “ครบ 5 ดอก = เปิดช่วงให้คำแนะนำส่วนตัว 1 คน”</li><li>ใช้น้ำเสียงจริงใจและชัดเจน ใช้ประโยชน์จากการตั้งคำถาม</li></ul></div>`;
+            resultsData.A.desc = `<div class="res-keyword">คีย์เวิร์ด: สร้างสรรค์ มีเอกลักษณ์ “ฉันจะเล่าเรื่องผ่านงานของฉัน”</div><div class="res-topic">ตัวตนด้านใน</div><div class="res-text">ชอบสร้างสิ่งใหม่ ๆ ไม่ชอบอะไรที่เหมือนใคร มักคิดเป็นภาพ เสียง หรือ movement มากกว่าคำพูด ใช้ศิลปะ/การแสดง/ดนตรี/ไพ่/การเต้น เป็นภาษาของตัวเอง อาจจะเป็นคนเก็บตัวหน่อย แต่เวลาได้แสดงงานของตัวเองจะเปล่งประกายมาก</div><div class="res-topic">ฟีลเวลาไลฟ์</div><div class="res-text">เหมือน “นั่งดูศิลปินทำงานใกล้ ๆ” เล่นดนตรี, ร้องเพลง, เต้น, วาดรูป, วาด tarot aesthetic, ทำ DIY, ทำ craft มีความ unique สูง คนดูจะรู้สึกว่าไลฟ์นี้ไม่เหมือนห้องอื่น</div><div class="res-topic">จุดแข็ง</div><div class="res-text">แตกต่างชัดเจน สามารถสร้าง character ได้แรงมาก มีโอกาสต่อยอดไปทางคอนเทนต์ YouTube, Clip, Reels, Brand collab ถ้าจับ mood & tone ดี จะกลายเป็น “ห้องที่มาแล้วรู้สึกสวย/เท่/ขลัง”</div><div class="trick-box"><div class="trick-header">✔ ทริคของครีเอเตอร์สาย Art ให้ได้ของขวัญมากขึ้น</div><ul class="trick-list"><li>ทำ “Art for Gift”: “ครบ 3 ดอก = วาดดอกไม้ 1 ดอกให้คุณนะคะ”</li><li>ตั้ง Stage Mood ให้มีความ aesthetic → กระตุ้นให้คนอยากให้</li><li>ทำกิจกรรม “เลือกสีดอกไม้แล้วฉันวาดให้”</li></ul></div>`;
 
             form.addEventListener('submit', function(e) {
                 e.preventDefault();
                 
-                // เปลี่ยนปุ่มเป็น Loading
+                // Final Check
+                const inputs = document.getElementById('step2').querySelectorAll('input[required]');
+                let isValid = true;
+                inputs.forEach(input => {
+                    const name = input.name;
+                    if (!document.querySelector(`input[name="${name}"]:checked`)) isValid = false;
+                });
+
+                if (!isValid) {
+                    alert('กรุณาตอบคำถามให้ครบทุกข้อครับ');
+                    return;
+                }
+
+                // Loading
                 const originalBtnText = submitBtn.innerText;
                 submitBtn.innerText = "กำลังประมวลผล...";
                 submitBtn.disabled = true;
@@ -688,7 +620,6 @@
                 const dataObj = {};
                 const scores = { F: 0, G: 0, C: 0, T: 0, A: 0 };
 
-                // เก็บข้อมูลจาก Form และคำนวณคะแนน
                 for (let [key, value] of formData.entries()) {
                     dataObj[key] = value;
                     if (['q1','q2','q3','q4','q5','q6','q7','q8','q9','q10'].includes(key)) {
@@ -696,7 +627,6 @@
                     }
                 }
 
-                // หาผลลัพธ์ที่คะแนนสูงสุด
                 let maxScore = 0;
                 let resultKey = 'F'; 
                 for (const [key, value] of Object.entries(scores)) {
@@ -706,17 +636,15 @@
                     }
                 }
 
-                // ส่งข้อมูลไป Webhook (Google Sheet)
+                // Send to Webhook
                 fetch(WEBHOOK_URL, {
                     method: 'POST',
                     mode: 'no-cors',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(dataObj)
-                }).then(() => {
-                    console.log("Data sent to sheet");
-                }).catch(err => console.error("Error sending data:", err));
+                });
 
-                // แสดง Modal ผลลัพธ์
+                // Show Result
                 const data = resultsData[resultKey];
                 document.getElementById('resTitle').textContent = data.title;
                 document.getElementById('resEmoji').textContent = data.emoji;
@@ -724,23 +652,29 @@
                 document.getElementById('resDesc').innerHTML = data.desc;
 
                 modal.classList.add('show');
-                
-                // คืนค่าปุ่ม
                 submitBtn.innerText = originalBtnText;
                 submitBtn.disabled = false;
             });
 
-            // ฟังก์ชันปิด Modal แล้วเด้งกลับไปหน้าแรก (Reset & Go to Step 1)
-            const closeModalAndReset = () => {
-                modal.classList.remove('show'); // ปิด Modal
-                form.reset(); // ล้างค่าในฟอร์มทั้งหมด
-                goToStep(1); // กลับไปหน้าแรก (Step 1)
+            // Logic กลับหน้าแรกเมื่อปิด Modal
+            const resetAndGoHome = () => {
+                modal.classList.remove('show');
+                form.reset(); // ล้างค่า
+                
+                // กลับไปหน้า Landing
+                document.getElementById('quizForm').classList.remove('show');
+                setTimeout(() => {
+                    document.getElementById('quizForm').style.display = 'none';
+                    document.getElementById('landingPage').style.display = 'block';
+                    document.querySelectorAll('.form-step').forEach(el => el.classList.remove('active'));
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                }, 300);
             };
 
-            closeBtn.onclick = closeModalAndReset;
+            closeBtn.onclick = resetAndGoHome;
             window.onclick = (e) => { 
                 if (e.target == modal) {
-                    closeModalAndReset();
+                    resetAndGoHome();
                 }
             }
         });
